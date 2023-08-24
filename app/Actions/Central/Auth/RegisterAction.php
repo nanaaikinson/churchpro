@@ -2,6 +2,7 @@
 
 namespace App\Actions\Central\Auth;
 
+use App\Enums\UserChannelEnum;
 use App\Enums\UserProviderEnum;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
@@ -14,7 +15,6 @@ class RegisterAction
 
   public function handle(RegisterRequest $request)
   {
-    $request->validated();
     $channel = $request->input('channel');
     $provider = $request->input('provider');
 
@@ -64,6 +64,12 @@ class RegisterAction
     if ($provider == UserProviderEnum::Local) {
       $user->passwords()->create([
         'password' => bcrypt($request->input('password')),
+      ]);
+    }
+
+    if ($channel == UserChannelEnum::Tenant) {
+      $iam = $user->iams()->create([
+        'value' => generate_iam(),
       ]);
     }
 

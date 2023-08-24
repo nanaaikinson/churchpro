@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 
+/**
+ * @mixin IdeHelperBranch
+ */
 class Branch extends Model
 {
   use HasFactory, HasUlids;

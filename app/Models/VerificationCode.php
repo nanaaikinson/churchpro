@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Str;
 
+/**
+ * @mixin IdeHelperVerificationCode
+ */
 class VerificationCode extends Model
 {
   use HasFactory, HasUlids;

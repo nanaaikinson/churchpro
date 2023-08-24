@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Plank\Mediable\Media as PlankMedia;
 use Str;
 
+/**
+ * @mixin IdeHelperMedia
+ */
 class Media extends PlankMedia
 {
   use HasUlids;

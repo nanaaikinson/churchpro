@@ -10,7 +10,7 @@ return new class extends Migration {
     Schema::create('iams', function (Blueprint $table) {
       $table->ulid('id')->primary();
       $table->ulid('user_id');
-      $table->ulid('organization_id');
+      $table->ulid('organization_id')->nullable();
       $table->string('value');
       $table->timestamps();
       $table->softDeletes();

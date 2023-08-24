@@ -8,10 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 use Plank\Mediable\Mediable;
 use Str;
 
-class User extends Authenticatable
+/**
+ * @mixin IdeHelperUser
+ */
+class User extends Authenticatable implements JWTSubject
 {
   use HasApiTokens, HasFactory, Notifiable, HasUlids, Mediable;
 
@@ -30,6 +34,16 @@ class User extends Authenticatable
   public function newUniqueId()
   {
     return ((string) Str::ulid());
+  }
+
+  public function getJWTIdentifier()
+  {
+    return $this->getKey();
+  }
+
+  public function getJWTCustomClaims()
+  {
+    return [];
   }
 
   // Relationships

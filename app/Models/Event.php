@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Plank\Mediable\Mediable;
 use Str;
 
+/**
+ * @mixin IdeHelperEvent
+ */
 class Event extends Model
 {
   use HasFactory, HasUlids, Mediable;

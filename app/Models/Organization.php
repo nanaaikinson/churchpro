@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 use Plank\Mediable\Mediable;
 use Str;
 
+/**
+ * @mixin IdeHelperOrganization
+ */
 class Organization extends Model
 {
   use HasFactory, HasUlids, Mediable;
