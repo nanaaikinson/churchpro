@@ -5,9 +5,12 @@ namespace App\Actions\Central\Auth;
 use App\Enums\UserChannelEnum;
 use App\Enums\UserProviderEnum;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\AccountVerificationMail;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use Illuminate\Support\Facades\Mail;
 use Lorisleiva\Actions\Concerns\AsAction;
+use DB;
 
 class RegisterAction
 {
@@ -17,6 +20,8 @@ class RegisterAction
   {
     $channel = $request->input('channel');
     $provider = $request->input('provider');
+
+    DB::beginTransaction();
 
     try {
       // Find user by email
@@ -43,8 +48,11 @@ class RegisterAction
         'providers' => json_encode(array_merge($user->providers, [$provider]))
       ]);
 
+      DB::commit();
       return $this->messageResponse('Account created successfully.');
     } catch (\Exception $e) {
+      DB::rollBack();
+
       return $this->badRequestResponse(null, $e->getMessage());
     }
   }
@@ -70,10 +78,14 @@ class RegisterAction
     if ($channel == UserChannelEnum::Tenant) {
       $iam = $user->iams()->create([
         'value' => generate_iam(),
+        'root' => true,
       ]);
     }
 
     // TODO: Send verification email if local provider
+    dispatch(function () use ($user) {
+      Mail::to($user->email)->send(new AccountVerificationMail($user));
+    })->afterCommit();
 
     return $this->messageResponse('Account created successfully.');
   }

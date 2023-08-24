@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -44,6 +45,14 @@ class User extends Authenticatable implements JWTSubject
   public function getJWTCustomClaims()
   {
     return [];
+  }
+
+  // Accessors
+  public function name(): Attribute
+  {
+    return Attribute::make(
+      get: fn() => $this->first_name . ' ' . $this->last_name,
+    );
   }
 
   // Relationships
