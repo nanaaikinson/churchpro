@@ -19,6 +19,7 @@ class RegisterRequest extends FormRequest
     $provider = $this->input('provider');
     $password = Password::min(8)->mixedCase()->letters()->numbers();
 
+    // Validation rules
     $rules = [
       'first_name' => ['required', 'string', 'max:191'],
       'last_name' => ['required', 'string', 'max:191'],
@@ -27,8 +28,9 @@ class RegisterRequest extends FormRequest
       'provider' => ['required', 'string', 'max:191', new EnumValue(UserProviderEnum::class)],
     ];
 
+    // Provide password if local provider
     if ($provider == UserProviderEnum::Local) {
-      $rules['password'] = ['required', 'max:100', in_production() ? $password->uncompromised() : $password];
+      $rules['password'] = ['required', 'max:100', 'confirmed', in_production() ? $password->uncompromised() : $password];
     }
 
     return $rules;

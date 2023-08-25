@@ -29,27 +29,27 @@ class RegisterAction
 
       // Create user if not found
       if (!$user) {
-        return $this->createNewUser($request, $channel, $provider);
-      }
+        $user = $this->createNewUser($request, $channel, $provider);
+      } else {
+        // Check if user already registered with provider or channel
+        if ($user->providers && in_array($provider, $user->providers)) {
+          return $this->badRequestResponse(null, 'User already registered with this provider.');
+        }
 
-      // Check if user already registered with provider or channel
-      if ($user->providers && in_array($provider, $user->providers)) {
-        return $this->badRequestResponse(null, 'User already registered with this provider.');
-      }
+        // Check if user already registered with provider or channel
+        if ($user->channels && in_array($channel, $user->channels)) {
+          return $this->badRequestResponse(null, 'User already registered with this channel.');
+        }
 
-      // Check if user already registered with provider or channel
-      if ($user->channels && in_array($channel, $user->channels)) {
-        return $this->badRequestResponse(null, 'User already registered with this channel.');
+        // Update user if found
+        $user->update([
+          'channels' => json_encode(array_merge($user->channels, [$channel])),
+          'providers' => json_encode(array_merge($user->providers, [$provider]))
+        ]);
       }
-
-      // Update user if found
-      $user->update([
-        'channels' => json_encode(array_merge($user->channels, [$channel])),
-        'providers' => json_encode(array_merge($user->providers, [$provider]))
-      ]);
 
       DB::commit();
-      return $this->messageResponse('Account created successfully.');
+      return $this->dataResponse(['id' => $user->id], 'Account created successfully.');
     } catch (\Exception $e) {
       DB::rollBack();
 
@@ -87,6 +87,6 @@ class RegisterAction
       Mail::to($user->email)->send(new AccountVerificationMail($user));
     })->afterCommit();
 
-    return $this->messageResponse('Account created successfully.');
+    return $user;
   }
 }
