@@ -6,6 +6,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -32,7 +35,7 @@ class User extends Authenticatable implements JWTSubject
     'providers' => 'array'
   ];
 
-  public function newUniqueId()
+  public function newUniqueId(): string
   {
     return ((string) Str::ulid());
   }
@@ -42,7 +45,7 @@ class User extends Authenticatable implements JWTSubject
     return $this->getKey();
   }
 
-  public function getJWTCustomClaims()
+  public function getJWTCustomClaims(): array
   {
     return [];
   }
@@ -56,38 +59,43 @@ class User extends Authenticatable implements JWTSubject
   }
 
   // Relationships
-  public function verificationCodes()
+  public function verificationCodes(): MorphMany
   {
     return $this->morphMany(VerificationCode::class, 'verifiable');
   }
 
-  public function organizations()
+  public function organizations(): BelongsToMany
   {
     return $this->belongsToMany(Organization::class, 'user_organizations');
   }
 
-  public function comments()
+  public function comments(): HasMany
   {
     return $this->hasMany(Comment::class);
   }
 
-  public function prayers()
+  public function prayers(): HasMany
   {
     return $this->hasMany(Prayer::class);
   }
 
-  public function branches()
+  public function branches(): BelongsToMany
   {
     return $this->belongsToMany(Branch::class, 'user_branches');
   }
 
-  public function passwords()
+  public function passwords(): HasMany
   {
     return $this->hasMany(Password::class);
   }
 
-  public function iams()
+  public function iams(): HasMany
   {
     return $this->hasMany(Iam::class);
+  }
+
+  public function devices(): HasMany
+  {
+    return $this->hasMany(UserDevice::class);
   }
 }

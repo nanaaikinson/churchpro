@@ -18,6 +18,7 @@ return new class extends Migration {
       $table->string('email')->unique();
       $table->timestamp('email_verified_at')->nullable();
       $table->string('status')->default(UserStatusEnum::Active);
+      $table->string('onboarding_step')->default(\App\Enums\UserOnboardingStepEnum::AccountCreation);
       $table->json('channels')->nullable();
       $table->json('providers')->nullable();
       $table->rememberToken();

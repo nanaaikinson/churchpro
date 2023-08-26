@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\User;
+use App\Models\VerificationCode;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -20,7 +21,7 @@ class AccountVerificationMail extends Mailable
    *
    * @return void
    */
-  public function __construct(private readonly User $user)
+  public function __construct(private readonly User $user, private readonly VerificationCode $verificationCode)
   {
     //
   }
@@ -30,14 +31,14 @@ class AccountVerificationMail extends Mailable
    *
    * @return \Illuminate\Mail\Mailables\Envelope
    */
-  public function envelope()
+  public function envelope(): Envelope
   {
     return new Envelope(
       from: new Address(
-        address: 'info@mail.aikintech.com',
+        address: config('chsync.emails.info'),
         name: config('app.name'),
       ),
-      subject: 'Confirm your email for your ' . config('app.name') . ' account',
+      subject: 'Complete Your Account Creation - Verification Code Inside',
     );
   }
 
@@ -46,12 +47,13 @@ class AccountVerificationMail extends Mailable
    *
    * @return \Illuminate\Mail\Mailables\Content
    */
-  public function content()
+  public function content(): Content
   {
     return new Content(
       view: 'emails.account-verification',
       with: [
-        'user' => $this->user,
+        'name' => $this->user->name,
+        'code' => $this->verificationCode->code
       ],
     );
   }
@@ -61,7 +63,7 @@ class AccountVerificationMail extends Mailable
    *
    * @return array
    */
-  public function attachments()
+  public function attachments(): array
   {
     return [];
   }

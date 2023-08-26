@@ -1,5 +1,6 @@
 @php
   $appName = config('app.name');
+  $support = config('chsync.emails.support');
 @endphp
 
 <!DOCTYPE html>
@@ -8,19 +9,16 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Confirm your email for your {{ $appName }} account</title>
+  <title>Complete Your Account Creation - Verification Code Inside</title>
 </head>
 <body>
-  <p>Hi, {{ $user->name }}</p>
-  <p>Thank you for choosing {{ $appName }}.</p>
-  <p>To ensure the security of your account and provide you with the best possible experience, we kindly request you to verify your account by following the simple steps below:</p>
-
-  <p>Click on the following link to verify your account: Verify Account</p>
-  <p>Once you click the link, you will be directed to a verification page. Please follow the instructions provided to complete the verification process.</p>
-  <p>After verifying your account, you will gain access to all the exclusive features and benefits that {{ $appName }} has to offer. We're committed to making your experience exceptional.</p>
-  <p>If you did not create an account with {{ $appName }}, please ignore this email. Your account will not be verified without your confirmation.</p>
-
-  <p>For any assistance or inquiries, please don't hesitate to contact our dedicated support team at [Support Email] or [Support Phone Number].</p>
-  <p>Thank you for choosing {{ $appName }}. We look forward to serving you and providing you with an amazing experience.</p>
+  <p>Dear {{ $name }},</p>
+  <p>Congratulations and welcome to {{ $appName }}! We're delighted to have you on board. You're just one step away from unlocking the full potential of your account. To finalize your account creation, we need to verify your email address.</p>
+  <p>Please use the following verification code:</p>
+  <p>Verification Code: <span>{{ $code }}</span></p>
+  <p>Alternatively, you can simply click on the following link to be automatically verified: <a href="[Verification URL]">[Verification URL]</a></p>
+  <p>This step helps ensure the security of your account and provides you with seamless access to all the necessary features you signed up for. If you didn't sign up for an account, or if you have any questions, please feel free to contact our support team at {{ $support }}.</p>
+  <p>Thank you for choosing us.</p>
+  <p>Best regards, <br />{{ $appName }} Team</p>
 </body>
 </html>

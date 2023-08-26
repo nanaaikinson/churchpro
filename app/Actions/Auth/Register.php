@@ -5,6 +5,7 @@ namespace App\Actions\Auth;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Mail\AccountVerificationMail;
 use App\Models\User;
+use App\Models\VerificationCode;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -25,13 +26,31 @@ class Register
         'email' => $request->input('email'),
       ]);
 
+      /**
+       * @var VerificationCode $verificationCode
+       */
+      // Create email verification code
+      $verificationCode = $user->verificationCodes()->create([
+        'code' => generate_verification_code(8),
+        'enabled' => true,
+        'expires_at' => now()->addDay(),
+      ]);
+
       // Send user email verification
-      dispatch(function () use ($user) {
-        Mail::to($user->email)->send(new AccountVerificationMail($user));
+      dispatch(function () use ($user, $verificationCode) {
+        Mail::to($user->email)->send(new AccountVerificationMail($user, $verificationCode));
       })->afterCommit();
 
       DB::commit();
-      return $this->messageResponse('Thank you for signing up!. Your account has been created and If you confirm your account after you can now sign in with your credentials.');
+      $appName = config('app.name');
+
+      return $this->dataResponse(
+        ['id' => $user->id],
+        "Thank you for signing up! We're thrilled to have you join {$appName}.
+        Your account creation is almost complete. Please check your email for a verification code.
+        Once you've received it, simply enter the code in the input below to finalize your account setup.
+        We can't wait to see you make the most of our platform!"
+      );
     } catch (\Exception $e) {
       DB::rollBack();
 
