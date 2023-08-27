@@ -16,14 +16,24 @@ class AccountVerificationMail extends Mailable
 {
   use Queueable, SerializesModels;
 
+  private string $emailTemplate = 'emails.account-verification';
+  private string $emailSubject = 'Complete Your Account Creation - Verification Code Inside';
+
   /**
    * Create a new message instance.
    *
    * @return void
    */
-  public function __construct(private readonly User $user, private readonly VerificationCode $verificationCode)
+  public function __construct(
+    private readonly User             $user,
+    private readonly VerificationCode $verificationCode,
+    private readonly bool             $resend = false
+  )
   {
-    //
+    if ($this->resend) {
+      $this->emailTemplate = 'emails.resend-verification';
+      $this->emailSubject = 'Resend Verification Code - Complete Your Account Creation';
+    }
   }
 
   /**
@@ -38,7 +48,7 @@ class AccountVerificationMail extends Mailable
         address: config('chsync.emails.info'),
         name: config('app.name'),
       ),
-      subject: 'Complete Your Account Creation - Verification Code Inside',
+      subject: $this->emailSubject,
     );
   }
 
@@ -50,7 +60,7 @@ class AccountVerificationMail extends Mailable
   public function content(): Content
   {
     return new Content(
-      view: 'emails.account-verification',
+      view: $this->emailTemplate,
       with: [
         'name' => $this->user->name,
         'code' => $this->verificationCode->code

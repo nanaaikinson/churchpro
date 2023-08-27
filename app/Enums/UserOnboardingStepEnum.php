@@ -18,5 +18,4 @@ final class UserOnboardingStepEnum extends Enum
   const PasswordCreation = 'password creation';
   const TenantOnboarding = 'tenant onboarding';
   const Complete = 'complete';
-
 }
