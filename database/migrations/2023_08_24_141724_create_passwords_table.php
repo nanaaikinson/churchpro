@@ -11,7 +11,7 @@ return new class extends Migration {
       $table->ulid('id')->primary();
       $table->ulid('user_id');
       $table->string('password');
-      $table->boolean('active')->default(true);
+      $table->boolean('active')->default(false);
       $table->timestamps();
       $table->softDeletes();
 

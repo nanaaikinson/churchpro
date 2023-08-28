@@ -2,6 +2,7 @@
 
 namespace App\Actions\Auth;
 
+use App\Enums\UserProviderEnum;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Mail\AccountVerificationMail;
 use App\Models\User;
@@ -18,13 +19,25 @@ class Register
   public function handle(RegisterRequest $request)
   {
     DB::beginTransaction();
+    $channel = $request->input('channel');
+    $provider = $request->input('provider');
 
     try {
       $user = User::create([
         'first_name' => $request->input('first_name'),
         'last_name' => $request->input('last_name'),
         'email' => $request->input('email'),
+        'channels' => json_encode([$channel]),
+        'providers' => json_encode([$provider]),
       ]);
+
+      if ($request->input('provider') == UserProviderEnum::Local) {
+        // Create password
+        $user->passwords()->create([
+          'password' => bcrypt($request->input('password')),
+          'active' => true,
+        ]);
+      }
 
       /**
        * @var VerificationCode $verificationCode

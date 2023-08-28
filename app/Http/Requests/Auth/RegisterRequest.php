@@ -16,7 +16,6 @@ class RegisterRequest extends FormRequest
    */
   public function rules(): array
   {
-    $channel = $this->input('channel');
     $provider = $this->input('provider');
     $password = Password::min(8)->letters()->mixedCase()->numbers();
 
@@ -24,15 +23,12 @@ class RegisterRequest extends FormRequest
       'first_name' => ['required', 'string', 'max:191'],
       'last_name' => ['required', 'string', 'max:191'],
       'email' => ['required', 'string', 'email', Rule::unique('users', 'email')],
+      'channel' => ['required', 'string', new EnumValue(UserChannelEnum::class)],
+      'provider' => ['required', 'string', new EnumValue(UserProviderEnum::class)]
     ];
 
-    // Mobile validation
-    if ($channel == UserChannelEnum::Mobile) {
-      $rules['provider'] = ['required', 'string', new EnumValue(UserProviderEnum::class)];
-
-      if ($provider == UserProviderEnum::Local) {
-        $rules['password'] = ['required', 'max:191', in_production() ? $password->uncompromised() : $password];
-      }
+    if ($provider == UserProviderEnum::Local) {
+      $rules['password'] = ['required', 'max:191', in_production() ? $password->uncompromised() : $password];
     }
 
     return $rules;
@@ -41,7 +37,7 @@ class RegisterRequest extends FormRequest
   public function messages()
   {
     return [
-      'email.unique' => ''
+      'email.unique' => 'The email address you entered is already in use.'
     ];
   }
 }

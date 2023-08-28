@@ -11,7 +11,7 @@ use BenSampo\Enum\Enum;
  */
 final class UserChannelEnum extends Enum
 {
-    const Admin = 'admin';
-    const Tenant = 'tenant';
-    const Mobile = 'mobile';
+  const Admin = 'admin';
+  const Tenant = 'tenant';
+  const Mobile = 'mobile';
 }
