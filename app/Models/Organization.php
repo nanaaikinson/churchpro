@@ -41,4 +41,9 @@ class Organization extends Model
   {
     return $this->hasMany(Prayer::class);
   }
+
+  public function branches()
+  {
+    return $this->hasMany(Branch::class);
+  }
 }

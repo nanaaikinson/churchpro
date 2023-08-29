@@ -12,49 +12,91 @@ info:
 servers:
   - url: 'https://churchsync.test/api'
     description: Local
-paths: {}
+tags:
+  - name: admin
+  - name: central
+  - name: mobile
+  - name: tenant
+paths:
+  /c/auth/social/sign-up:
+    post:
+      summary: Your GET endpoint
+      tags:
+        - central
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SocialSignUpResponse'
+      operationId: auth-social-sign-up
+      description: 'Central: auth social sign up'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+              required:
+                - accessToken
 components:
   schemas:
-    User:
-      title: User
+    SocialSignUpResponse:
       type: object
-      description: ''
-      examples:
-        - id: 142
-          firstName: Alice
-          lastName: Smith
-          email: alice.smith@gmail.com
-          dateOfBirth: '1997-10-31'
-          emailVerified: true
-          signUpDate: '2019-08-24'
+      x-examples:
+        Example 1:
+          data:
+            user:
+              firstName: Nana Kwesi
+              lastName: Ofosu-Aikins
+              avatar: 'https://lh3.googleusercontent.com/a/AAcHTtdJkVwMUPqn-uF54RS_MRQZSJvS5TRj588XlviOCpDo=s96-c'
+            tokens:
+              accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvc29jaWFsL3NpZ24tdXAiLCJpYXQiOjE2OTMzMTY5ODUsImV4cCI6MTY5MzMyMDU4NSwibmJmIjoxNjkzMzE2OTg1LCJqdGkiOiJKTm1IZ2c4MDlhZENlOXBIIiwic3ViIjoiMDFIOTBSWENTVzFOMjJESzE2R0VERzE0M1IiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiY2hhbm5lbCI6InRlbmFudCIsIm9uYm9hcmRpbmdfc3RlcCI6InRlbmFudCBvbmJvYXJkaW5nIn0.Mp59SQkJpKIOkRgiWV93u0k_T-GobzaWvEGwsVKi8cE
+              expiresAt: '2023-08-30T13:49:45.665606Z'
+              refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvc29jaWFsL3NpZ24tdXAiLCJpYXQiOjE2OTMzMTY5ODUsImV4cCI6MTY5MzMyMDU4NSwibmJmIjoxNjkzMzE2OTg1LCJqdGkiOiJlU0hLREx0S3NlYTVDejBvIiwic3ViIjoiMDFIOTBSWENTVzFOMjJESzE2R0VERzE0M1IiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiY2hhbm5lbCI6InRlbmFudCIsIm9uYm9hcmRpbmdfc3RlcCI6InRlbmFudCBvbmJvYXJkaW5nIn0.GECZ6C57ycJL0KqXHCvIJGv27OQGcihY5tbuiPKYH3k
+          message: ''
       properties:
-        id:
-          type: integer
-          description: Unique identifier for the given user.
-        firstName:
+        data:
+          type: object
+          required:
+            - user
+            - tokens
+          properties:
+            user:
+              type: object
+              required:
+                - firstName
+                - lastName
+                - avatar
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                avatar:
+                  type: string
+            tokens:
+              type: object
+              required:
+                - accessToken
+                - expiresAt
+                - refreshToken
+              properties:
+                accessToken:
+                  type: string
+                expiresAt:
+                  type: string
+                refreshToken:
+                  type: string
+        message:
           type: string
-        lastName:
-          type: string
-        email:
-          type: string
-          format: email
-        dateOfBirth:
-          type: string
-          format: date
-          example: '1997-10-31'
-        emailVerified:
-          type: boolean
-          description: Set to true if the user's email has been verified.
-        createDate:
-          type: string
-          format: date
-          description: The date that the user was created.
       required:
-        - id
-        - firstName
-        - lastName
-        - email
-        - emailVerified
+        - data
+        - message
+      description: Google sign up response
   securitySchemes:
     JWT:
       type: http

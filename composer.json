@@ -13,10 +13,13 @@
     "guzzlehttp/guzzle": "^7.2",
     "laravel/framework": "^10.10",
     "laravel/sanctum": "^3.2",
+    "laravel/socialite": "^5.8",
     "laravel/tinker": "^2.8",
+    "league/flysystem-aws-s3-v3": "^3.15",
     "lorisleiva/laravel-actions": "^2.7",
     "php-open-source-saver/jwt-auth": "^2.1",
     "plank/laravel-mediable": "^5.9",
+    "predis/predis": "^2.2",
     "resend/resend-laravel": "^0.5.0"
   },
   "require-dev": {
