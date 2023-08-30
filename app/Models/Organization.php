@@ -46,4 +46,9 @@ class Organization extends Model
   {
     return $this->hasMany(Branch::class);
   }
+
+  public function iams()
+  {
+    return $this->hasMany(Iam::class);
+  }
 }

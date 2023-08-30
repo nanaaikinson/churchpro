@@ -37,6 +37,8 @@ class Onboard
   {
     DB::beginTransaction();
 
+    // TODO: Restrict to only one root organization per user
+
     try {
       /**
        * @var \App\Models\User $user
@@ -83,6 +85,8 @@ class Onboard
 
       // Persist to db
       DB::commit();
+
+      return $this->successResponse(null, 'Your organization\'s onboarding was successfully. Please wait for approval.');
 
     } catch (\Exception $e) {
       DB::rollBack();

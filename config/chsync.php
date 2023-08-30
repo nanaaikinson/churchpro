@@ -6,8 +6,8 @@ return [
   ],
   'jwt' => [
     'ttl' => [
-      'access' => (int) env('JWT_MOBILE_TTL_ACCESS', 60 * 2),
-      'refresh' => (int) env('JWT_MOBILE_TTL_REFRESH', 60 * 24),
+      'access' => env('JWT_TTL_ACCESS', 60 * 2),
+      'refresh' => env('JWT_TTL_REFRESH', 60 * 24),
     ]
   ],
   'emails' => [

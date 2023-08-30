@@ -25,11 +25,10 @@ class AccountVerificationMail extends Mailable
    * @return void
    */
   public function __construct(
-    private readonly User             $user,
-    private readonly VerificationCode $verificationCode,
-    private readonly bool             $resend = false
-  )
-  {
+    private readonly User $user,
+    private readonly string $code,
+    private readonly bool $resend = false
+  ) {
     if ($this->resend) {
       $this->emailTemplate = 'emails.resend-verification';
       $this->emailSubject = 'Resend Verification Code - Complete Your Account Creation';
@@ -63,7 +62,7 @@ class AccountVerificationMail extends Mailable
       view: $this->emailTemplate,
       with: [
         'name' => $this->user->name,
-        'code' => $this->verificationCode->code
+        'code' => $this->code
       ],
     );
   }

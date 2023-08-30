@@ -18,4 +18,10 @@ class Iam extends Model
   {
     return ((string) Str::ulid());
   }
+
+  // Relationships
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
 }

@@ -11,7 +11,7 @@ use BenSampo\Enum\Enum;
  */
 final class OrganizationApproval extends Enum
 {
-    const Approval = 'approval';
-    const Pending = 'pending';
-    const Rejected = 'rejected';
+  const Approved = 'approved';
+  const Pending = 'pending';
+  const Rejected = 'rejected';
 }

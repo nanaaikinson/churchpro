@@ -14,7 +14,6 @@ use Intervention\Image\Facades\Image;
 use Laravel\Socialite\Facades\Socialite;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Plank\Mediable\Facades\MediaUploader;
 
 class SocialSignUp
 {
@@ -34,48 +33,38 @@ class SocialSignUp
     try {
       $accessToken = $request->input('access_token');
       $result = Socialite::driver('google')->userFromToken($accessToken);
+      $user = User::where('email', $result->user['email'])->first();
 
-      // Create user
-      $user = User::create([
-        'first_name' => $result->user['given_name'],
-        'last_name' => $result->user['family_name'],
-        'email' => $result->user['email'],
-        'email_verified_at' => now(),
-        'onboarding_step' => UserOnboardingStepEnum::TenantOnboarding,
-        'channels' => json_encode([UserChannelEnum::Tenant, UserChannelEnum::Mobile]),
-        'providers' => json_encode([UserProviderEnum::Google]),
-      ]);
+      if ($user) {
+        throw new \Exception('Sorry. An account with this email already exists.');
+      } else {
+        // Create user
+        $user = User::create([
+          'first_name' => $result->user['given_name'],
+          'last_name' => $result->user['family_name'],
+          'email' => $result->user['email'],
+          'email_verified_at' => now(),
+          'onboarding_step' => UserOnboardingStepEnum::TenantOnboarding,
+          'channels' => json_encode([UserChannelEnum::Tenant, UserChannelEnum::Mobile]),
+          'providers' => json_encode([UserProviderEnum::Google]),
+        ]);
 
-      dispatch(function () use ($result, $user) {
-        // Upload and assign avatar
-        $image = Image::make($result->user['picture'])->encode('jpg');
-        $media = FileService::uploadFromString($image, FileUploadContentTypeEnum::Avatar);
+        dispatch(function () use ($result, $user) {
+          // Upload and assign avatar
+          $image = Image::make($result->user['picture'])->encode('jpg');
+          $media = FileService::uploadFromString($image, FileUploadContentTypeEnum::Avatar);
 
-        $user->attachMedia($media, 'avatar');
-      })->afterCommit();
+          $user->attachMedia($media, 'avatar');
+        })->afterCommit();
 
-      // Get tokens
-      $tokens = Login::withToken(
-        user: $user,
-        channel: UserChannelEnum::Tenant,
-        refresh: true,
-        onboardingStep: UserOnboardingStepEnum::TenantOnboarding
-      );
+        $data = Helper::userWithToken($user, UserChannelEnum::Tenant, true);
 
-      DB::commit();
+        DB::commit();
 
-      return $this->dataResponse(array_merge([
-        'user' => [
-          'first_name' => $user->first_name,
-          'last_name' => $user->last_name,
-          'avatar' => $result->user['picture']
-        ]
-      ], ['tokens' => $tokens]));
-
+        return $this->dataResponse($data);
+      }
     } catch (\Exception $e) {
       DB::rollBack();
-
-      \Log::error($e);
 
       return $this->badRequestResponse(null, $e->getMessage());
     }

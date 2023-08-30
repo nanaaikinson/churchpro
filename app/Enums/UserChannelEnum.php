@@ -13,5 +13,5 @@ final class UserChannelEnum extends Enum
 {
   const Admin = 'admin';
   const Tenant = 'tenant';
-  const Mobile = 'mobile';
+  const Mobile = 'mobile'; // TODO: Think through this before removal
 }

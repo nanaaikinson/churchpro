@@ -11,7 +11,6 @@ return new class extends Migration {
       $table->ulid('id')->primary();
       $table->ulid('user_id');
       $table->string('password');
-      $table->boolean('active')->default(false);
       $table->timestamps();
       $table->softDeletes();
 
@@ -19,7 +18,7 @@ return new class extends Migration {
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
       // Indexes
-      $table->index(['deleted_at', 'user_id', 'active']);
+      $table->index(['deleted_at', 'user_id']);
     });
   }
 };

@@ -24,15 +24,16 @@ paths:
       tags:
         - central
       responses:
-        '201':
-          description: Created
+        '200':
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SocialSignUpResponse'
+                $ref: '#/components/schemas/AuthUserResposne'
       operationId: auth-social-sign-up
       description: 'Central: auth social sign up'
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -42,48 +43,178 @@ paths:
                   type: string
               required:
                 - accessToken
+  /c/auth/local/sign-up:
+    post:
+      summary: Your GET endpoint
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResposne'
+      operationId: auth-local-sign-up
+      description: 'Central: auth local sign up'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  firstName: Nana
+                  lastName: Aikinson
+                  email: nanaaikinson2020@gmail.com
+                  password: Pa$$w0rd
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - firstName
+                - lastName
+                - email
+                - password
+  /c/organization/onboard:
+    post:
+      summary: Your GET endpoint
+      tags:
+        - central
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      operationId: organization-onboarding
+      description: 'Central: Organzation onboarding'
+      parameters: []
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OnboardingRequest'
+    parameters: []
 components:
   schemas:
-    SocialSignUpResponse:
+    OnboardingRequest:
+      type: object
+      x-examples:
+        Example 1:
+          name: ''
+          roleAtChurch: ''
+          defaultBranch: ''
+          phoneNumber: ''
+          location: ''
+          logo: ''
+      properties:
+        name:
+          type: string
+        roleAtChurch:
+          type: string
+        defaultBranch:
+          type: string
+        phoneNumber:
+          type: string
+        location:
+          type: string
+        logo:
+          type:
+            - string
+            - 'null'
+          format: binary
+      required:
+        - name
+        - roleAtChurch
+        - defaultBranch
+        - phoneNumber
+        - location
+      x-stoplight:
+        id: 3a96f6c69399b
+      title: OnboardingRequest
+      description: ''
+    MessageResponse:
+      title: MessageResponse
+      x-stoplight:
+        id: bnx29eprw94jt
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    AuthUserResposne:
       type: object
       x-examples:
         Example 1:
           data:
             user:
-              firstName: Nana Kwesi
-              lastName: Ofosu-Aikins
-              avatar: 'https://lh3.googleusercontent.com/a/AAcHTtdJkVwMUPqn-uF54RS_MRQZSJvS5TRj588XlviOCpDo=s96-c'
-            tokens:
-              accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvc29jaWFsL3NpZ24tdXAiLCJpYXQiOjE2OTMzMTY5ODUsImV4cCI6MTY5MzMyMDU4NSwibmJmIjoxNjkzMzE2OTg1LCJqdGkiOiJKTm1IZ2c4MDlhZENlOXBIIiwic3ViIjoiMDFIOTBSWENTVzFOMjJESzE2R0VERzE0M1IiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiY2hhbm5lbCI6InRlbmFudCIsIm9uYm9hcmRpbmdfc3RlcCI6InRlbmFudCBvbmJvYXJkaW5nIn0.Mp59SQkJpKIOkRgiWV93u0k_T-GobzaWvEGwsVKi8cE
-              expiresAt: '2023-08-30T13:49:45.665606Z'
-              refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvc29jaWFsL3NpZ24tdXAiLCJpYXQiOjE2OTMzMTY5ODUsImV4cCI6MTY5MzMyMDU4NSwibmJmIjoxNjkzMzE2OTg1LCJqdGkiOiJlU0hLREx0S3NlYTVDejBvIiwic3ViIjoiMDFIOTBSWENTVzFOMjJESzE2R0VERzE0M1IiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3IiwiY2hhbm5lbCI6InRlbmFudCIsIm9uYm9hcmRpbmdfc3RlcCI6InRlbmFudCBvbmJvYXJkaW5nIn0.GECZ6C57ycJL0KqXHCvIJGv27OQGcihY5tbuiPKYH3k
-          message: ''
+              firstName: Nana
+              lastName: Aikinson
+              email: nanaaikinson2020@gmail.com
+              avatar: null
+              onboardingStep: account verification
+              organizations: []
+            token:
+              accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvbG9jYWwvc2lnbi11cCIsImlhdCI6MTY5MzM1NjMyOCwiZXhwIjoxNjkzMzYzNTI4LCJuYmYiOjE2OTMzNTYzMjgsImp0aSI6Imh6ZGhvbU5XeTNQQWI3VzIiLCJzdWIiOiIwMUg5MVlFMVE5R1FEMEgxNEdYUFo5UFJTRiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJjaGFubmVsIjoidGVuYW50In0.fMGScLG9qDsYbSUManZnhmHQ5tLhsd_NiXkstRb5DUs
+              expiresAt: '2023-08-31T00:45:28.689725Z'
+              refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvbG9jYWwvc2lnbi11cCIsImlhdCI6MTY5MzM1NjMyOCwiZXhwIjoxNjkzNDQyNzI4LCJuYmYiOjE2OTMzNTYzMjgsImp0aSI6IlczTmdOVE9rMUlra0NISDIiLCJzdWIiOiIwMUg5MVlFMVE5R1FEMEgxNEdYUFo5UFJTRiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJjaGFubmVsIjoidGVuYW50In0.H5do1rZpoWDd5AX--4BjA3cH366XEWVY3V2Sr0Z3lek
+          message: |-
+            Thank you for signing up! We're thrilled to have you join Church Sync.
+                    Your account creation is almost complete. Please check your email for a verification code.
+                    Once you've received it, simply enter the code in the verification code input to finalize your account setup.
+                    We can't wait to see you make the most of our platform!
+      x-stoplight:
+        id: 3cf8a7923c54b
       properties:
         data:
           type: object
           required:
             - user
-            - tokens
           properties:
             user:
               type: object
               required:
                 - firstName
                 - lastName
+                - email
                 - avatar
+                - onboardingStep
+                - organizations
               properties:
                 firstName:
                   type: string
                 lastName:
                   type: string
-                avatar:
+                email:
                   type: string
-            tokens:
+                avatar:
+                  type:
+                    - string
+                    - 'null'
+                onboardingStep:
+                  type: string
+                organizations:
+                  type: array
+                  items:
+                    type: object
+            token:
               type: object
               required:
                 - accessToken
                 - expiresAt
-                - refreshToken
               properties:
                 accessToken:
                   type: string
@@ -96,7 +227,6 @@ components:
       required:
         - data
         - message
-      description: Google sign up response
   securitySchemes:
     JWT:
       type: http
