@@ -14,6 +14,10 @@ class VerificationCode extends Model
 {
   use HasFactory, HasUlids;
 
+  protected $casts = [
+    'expires_at' => 'datetime'
+  ];
+
   public function newUniqueId()
   {
     return ((string) Str::ulid());

@@ -10,11 +10,16 @@ Route::prefix('auth')->group(function () {
   Route::post('social/sign-in', \App\Actions\Auth\SocialSignIn::class);
   Route::post('social/sign-up', \App\Actions\Auth\SocialSignUp::class);
 
-  Route::post('resend-verification', \App\Actions\Auth\ResendEmailVerification::class);
+  // Protected routes
+  Route::middleware('auth:api')->group(function () {
+    Route::post('verify-account', \App\Actions\Auth\VerifyAccount::class);
+    Route::post('resend-verification', \App\Actions\Auth\ResendEmailVerification::class);
+  });
 });
 
+/**
+ * Protected routes
+ */
 Route::middleware('auth:api')->group(function () {
-  Route::prefix('organization')->group(function () {
-    Route::post('onboarding', \App\Actions\Organization\Onboard::class);
-  });
+  Route::post('organization/onboarding', \App\Actions\Organization\Onboard::class);
 });

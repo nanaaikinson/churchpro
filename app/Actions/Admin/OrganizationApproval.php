@@ -36,8 +36,12 @@ class OrganizationApproval
         ]);
 
       // Get users
-      $query = User::query()->with('organization')->whereRelation('iams', function ($query) {
-      })->get();
+      $query = DB::table('users')
+        ->join('iams', 'users.id', '=', 'iams.user_id')
+        ->join('organizations', 'organizations.id', '=', 'iams.organization_id')
+        ->where('iams.root', true)
+        ->whereIn('organizations.id', $request->input('organizations'))
+        ->get();
 
       dd($query);
 
