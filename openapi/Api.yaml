@@ -18,9 +18,38 @@ tags:
   - name: mobile
   - name: tenant
 paths:
+  /c/auth/social/sign-in:
+    post:
+      summary: ''
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResposne'
+      operationId: auth-social-sign-in
+      description: 'Central: auth social sign up'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  accessToken: ya29.a0AfB_byBe15ANRb_bdhKo6RNP3VO8f_ReVuCGl1MBUnL6XhRXktpH4OiZGgLpSq8qk2cgXs2K2cncGkNccfbBA2It9SLoOEgfkl2DyUPV7_PDrzaStX3T-tTWnCOgOeornTfAAnNf9qy9MIdldkc07r86aSG3vcDKqsg7-gaCgYKAeISARMSFQHsvYlspqE5ZiSu_8mBEuCxGWEsuw0173
+              properties:
+                accessToken:
+                  type: string
+              required:
+                - accessToken
+        description: ''
   /c/auth/social/sign-up:
     post:
-      summary: Your GET endpoint
+      summary: ''
       tags:
         - central
       responses:
@@ -43,9 +72,41 @@ paths:
                   type: string
               required:
                 - accessToken
+  /c/auth/local/sign-in:
+    post:
+      summary: ''
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResposne'
+      operationId: auth-local-sign-in
+      description: 'Central: auth local sign in'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  email: nanaaikinson2020@gmail.com
+                  password: Pa$$w0rd
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
   /c/auth/local/sign-up:
     post:
-      summary: Your GET endpoint
+      summary: ''
       tags:
         - central
       responses:
@@ -83,9 +144,70 @@ paths:
                 - lastName
                 - email
                 - password
-  /c/organization/onboard:
+  /c/auth/verify-account:
     post:
-      summary: Your GET endpoint
+      summary: ''
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      operationId: auth-verify-account
+      security:
+        - JWT: []
+      description: 'Central: Auth verify account'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  verificationCode: '78193620'
+              properties:
+                verificationCode:
+                  type: string
+              required:
+                - verificationCode
+  /c/auth/resend-email-verification:
+    post:
+      summary: ''
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      operationId: auth-resend-email-verification
+      security:
+        - JWT: []
+      description: 'Central: Auth resend email verification'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              x-examples:
+                Example 1:
+                  verificationCode: '78193620'
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+    parameters: []
+  /c/onboard-organization:
+    post:
+      summary: ''
       tags:
         - central
       responses:
@@ -192,7 +314,6 @@ components:
                 - email
                 - avatar
                 - onboardingStep
-                - organizations
               properties:
                 firstName:
                   type: string
@@ -212,9 +333,6 @@ components:
                     type: object
             token:
               type: object
-              required:
-                - accessToken
-                - expiresAt
               properties:
                 accessToken:
                   type: string
@@ -222,6 +340,9 @@ components:
                   type: string
                 refreshToken:
                   type: string
+              required:
+                - accessToken
+                - expiresAt
         message:
           type: string
       required:

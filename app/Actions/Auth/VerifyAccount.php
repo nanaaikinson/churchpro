@@ -44,6 +44,9 @@ class VerifyAccount
       // Disable verification code
       $verificationCode->update(['enabled' => false]);
 
+      // TODO: Send welcome and account verified email
+      dispatch(function () { })->afterCommit();
+
       DB::commit();
 
       return $this->messageResponse('Your account has been verified successfully.');
