@@ -115,6 +115,22 @@ paths:
                   email: nanaaikinson2020@gmail.com
                   password: Pa$$w0rd
                   channel: tenant
+  /c/auth/refresh-token:
+    get:
+      summary: ''
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefreshTokenResponse'
+      operationId: auth-refresh-token
+      description: 'Central: auth refresh token'
+      security:
+        - JWT: []
   /c/auth/verify-account:
     post:
       summary: ''
@@ -190,6 +206,43 @@ paths:
             schema:
               $ref: '#/components/schemas/OnboardingRequest'
     parameters: []
+  /m/prayers:
+    get:
+      summary: ''
+      tags:
+        - mobile
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MobilePrayers'
+      operationId: client-prayer-requests
+      security:
+        - JWT: []
+      description: 'Mobile: Get prayer-requests'
+    post:
+      summary: ''
+      operationId: client-request-prayer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      description: 'Client: request for a prayer'
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PrayerRequest'
+      tags:
+        - mobile
 components:
   schemas:
     OnboardingRequest:
@@ -291,7 +344,7 @@ components:
                 organizations:
                   type: array
                   items:
-                    type: object
+                    $ref: '#/components/schemas/Organization'
             token:
               type: object
               properties:
@@ -710,15 +763,12 @@ components:
         data:
           type: object
           required:
-            - accessToken
+            - access
             - expiresAt
-            - tokenType
           properties:
-            accessToken:
+            access:
               type: string
             expiresAt:
-              type: string
-            tokenType:
               type: string
         message:
           type: string
@@ -726,6 +776,167 @@ components:
       required:
         - data
         - message
+    Organization:
+      type: object
+      x-examples:
+        Example 1:
+          id: 01H93VYAA0HK3PE4SNFN1RC5A4
+          name: Light house
+          bookmarks: 0
+          likes: 0
+          logo: null
+          data:
+            phoneNumber: '0241726707'
+            location: Manfe
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        bookmarks:
+          type: integer
+        likes:
+          type: integer
+        logo:
+          type: 'null'
+        data:
+          type: object
+          required:
+            - phoneNumber
+            - location
+          properties:
+            phoneNumber:
+              type: string
+            location:
+              type: string
+      required:
+        - id
+        - name
+        - bookmarks
+        - likes
+        - logo
+        - data
+    PrayerRequest:
+      type: object
+      x-examples:
+        Example 1:
+          organization: 01H93VYAA0HK3PE4SNFN1RC5A4
+          title: Test prayer request
+          description: This is a test description
+      properties:
+        organization:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+      required:
+        - organization
+        - title
+        - description
+    MobilePrayers:
+      type: object
+      x-examples:
+        Example 1:
+          data:
+            - id: 01H99257805PBQX617341EBZ62
+              title: Test prayer request
+              description: This is a test description
+              organization:
+                id: 01H93VYAA0HK3PE4SNFN1RC5A4
+                name: Light house
+                logo: null
+              createdAt: '2023-09-01T19:05:14.000000Z'
+          meta:
+            show: Showing 1 to 1 of 1 items
+            total: 1
+            count: 1
+            perPage: 10
+            currentPage: 1
+            totalPages: 1
+            links:
+              first: 'https://chsync.test/api/m/prayers?page=1'
+              last: 'https://chsync.test/api/m/prayers?page=1'
+              prev: null
+              next: null
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+              title:
+                type: string
+              description:
+                type: string
+              organization:
+                type: object
+                required:
+                  - id
+                  - name
+                  - logo
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  logo:
+                    type: 'null'
+              createdAt:
+                type: string
+            required:
+              - id
+              - title
+              - description
+              - organization
+              - createdAt
+        meta:
+          type: object
+          required:
+            - show
+            - total
+            - count
+            - perPage
+            - currentPage
+            - totalPages
+            - links
+          properties:
+            show:
+              type: string
+            total:
+              type: integer
+            count:
+              type: integer
+            perPage:
+              type: integer
+            currentPage:
+              type: integer
+            totalPages:
+              type: integer
+            links:
+              type: object
+              required:
+                - first
+                - last
+                - prev
+                - next
+              properties:
+                first:
+                  type: string
+                last:
+                  type: string
+                prev:
+                  type:
+                    - string
+                    - 'null'
+                next:
+                  type:
+                    - string
+                    - 'null'
+      required:
+        - meta
   securitySchemes:
     JWT:
       type: http

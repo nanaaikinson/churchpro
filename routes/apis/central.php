@@ -16,6 +16,7 @@ Route::prefix('auth')->group(function () {
 Route::middleware('auth:api')->group(function () {
   Route::prefix('auth')->group(function () {
     Route::get('user', \App\Actions\Auth\GetUser::class);
+    Route::get('refresh-token', \App\Actions\Auth\RefreshToken::class);
     Route::post('verify-account', \App\Actions\Auth\VerifyAccount::class);
     Route::post('resend-verification', \App\Actions\Auth\ResendEmailVerification::class);
   });

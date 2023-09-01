@@ -2,9 +2,11 @@
 
 namespace App\Actions\Auth;
 
+use App\Enums\UserChannelEnum;
 use App\Enums\UserStatusEnum;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use BenSampo\Enum\Rules\EnumValue;
 use Laravel\Socialite\Facades\Socialite;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -17,11 +19,14 @@ class SocialSignIn
   {
     return [
       'access_token' => ['required', 'string'],
+      'channel' => ['required', 'string', new EnumValue(UserChannelEnum::class)]
     ];
   }
 
   public function handle(ActionRequest $request)
   {
+    $channel = $request->input('channel');
+
     try {
       $accessToken = $request->input('access_token');
       $result = Socialite::driver('google')->userFromToken($accessToken);
@@ -33,7 +38,7 @@ class SocialSignIn
 
       // Check status
       if ($user->status == UserStatusEnum::Active) {
-        $data = Helper::userWithToken(user: $user, channel: 'local', refresh: true, relations: true);
+        $data = Helper::userWithToken(user: $user, channel: $channel, refresh: true, relations: true);
 
         return $this->dataResponse($data, 'Successfully signed in.');
       }

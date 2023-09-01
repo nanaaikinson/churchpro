@@ -17,7 +17,7 @@ class GetUser
        * @var \App\Models\User $user
        */
       $user = $request->user('api');
-      $relations = $user->email_verified_at ? true : false;
+      $relations = (bool)$user->email_verified_at;
 
       return $this->dataResponse(Helper::user($user, $relations), 'Successfully retrieved user.');
     } catch (\Exception $e) {

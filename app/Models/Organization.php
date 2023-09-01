@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Services\FileService;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -24,6 +26,11 @@ class Organization extends Model
   public function newUniqueId()
   {
     return ((string) Str::ulid());
+  }
+
+  public function logo(): Attribute
+  {
+    return Attribute::make(get: fn() => FileService::getFileUrlFromMedia($this->firstMedia('logo')));
   }
 
   // Relationships
@@ -50,5 +57,15 @@ class Organization extends Model
   public function iams()
   {
     return $this->hasMany(Iam::class);
+  }
+
+  public function bookmarks()
+  {
+    return $this->morphMany(Bookmark::class, 'bookmarkable');
+  }
+
+  public function likes()
+  {
+    return $this->morphMany(Like::class, 'likeable');
   }
 }

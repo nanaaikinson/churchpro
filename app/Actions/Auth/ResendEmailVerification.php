@@ -42,9 +42,7 @@ class ResendEmailVerification
 
         // If user has an existing verification code, disable it
         if ($user->verificationCodes->isNotEmpty()) {
-          $user->verificationCodes()->update([
-            'enabled' => false
-          ]);
+          $user->verificationCodes()->update(['enabled' => false]);
         }
 
         // Create new verification code

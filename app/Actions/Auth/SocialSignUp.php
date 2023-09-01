@@ -9,6 +9,7 @@ use App\Enums\UserProviderEnum;
 use App\Models\User;
 use App\Services\FileService;
 use App\Traits\ApiResponse;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Facades\Image;
 use Laravel\Socialite\Facades\Socialite;
@@ -23,12 +24,14 @@ class SocialSignUp
   {
     return [
       'access_token' => ['required', 'string'],
+      'channel' => ['required', 'string', new EnumValue(UserChannelEnum::class)]
     ];
   }
 
   public function handle(ActionRequest $request)
   {
     DB::beginTransaction();
+    $channel = $request->input('channel');
 
     try {
       $accessToken = $request->input('access_token');
@@ -57,7 +60,7 @@ class SocialSignUp
           $user->attachMedia($media, 'avatar');
         })->afterCommit();
 
-        $data = Helper::userWithToken($user, UserChannelEnum::Tenant, true);
+        $data = Helper::userWithToken($user, $channel, true);
 
         DB::commit();
 
