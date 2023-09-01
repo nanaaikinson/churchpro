@@ -23,10 +23,27 @@ if (!function_exists('generate_verification_code')) {
   }
 }
 
-if (!function_exists('organization')) {
-  function organization()
+if (!function_exists('tenant')) {
+  function tenant(string $key = 'xTenant')
   {
+    /**
+     * @var \App\Models\Organization $tenant
+     */
+    $tenant = request()->get($key);
 
+    return $tenant;
+  }
+}
+
+if (!function_exists('workspace')) {
+  function workspace(string $key = 'xWorkspace')
+  {
+    /**
+     * @var \App\Models\Branch $workspace
+     */
+    $workspace = request()->get($key);
+
+    return $workspace;
   }
 }
 

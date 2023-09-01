@@ -68,5 +68,7 @@ class Kernel extends HttpKernel
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     'horizonBasicAuth' => \App\Http\Middleware\HorizonBasicAuthMiddleware::class,
+    'user.checks' => \App\Http\Middleware\CheckUserAuthorizationMiddleware::class,
+    'tenant.resolver' => \App\Http\Middleware\TenantResolverMiddleware::class,
   ];
 }

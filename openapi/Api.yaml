@@ -29,7 +29,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResposne'
+                $ref: '#/components/schemas/AuthUserResponse'
       operationId: auth-social-sign-in
       description: 'Central: auth social sign up'
       requestBody:
@@ -37,15 +37,11 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/SocialRequest'
               x-examples:
                 Example 1:
                   accessToken: ya29.a0AfB_byBe15ANRb_bdhKo6RNP3VO8f_ReVuCGl1MBUnL6XhRXktpH4OiZGgLpSq8qk2cgXs2K2cncGkNccfbBA2It9SLoOEgfkl2DyUPV7_PDrzaStX3T-tTWnCOgOeornTfAAnNf9qy9MIdldkc07r86aSG3vcDKqsg7-gaCgYKAeISARMSFQHsvYlspqE5ZiSu_8mBEuCxGWEsuw0173
-              properties:
-                accessToken:
-                  type: string
-              required:
-                - accessToken
+                  channel: tenant
         description: ''
   /c/auth/social/sign-up:
     post:
@@ -58,7 +54,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResposne'
+                $ref: '#/components/schemas/AuthUserResponse'
       operationId: auth-social-sign-up
       description: 'Central: auth social sign up'
       requestBody:
@@ -66,12 +62,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                accessToken:
-                  type: string
-              required:
-                - accessToken
+              $ref: '#/components/schemas/SocialRequest'
   /c/auth/local/sign-in:
     post:
       summary: ''
@@ -83,7 +74,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResposne'
+                $ref: '#/components/schemas/AuthUserResponse'
       operationId: auth-local-sign-in
       description: 'Central: auth local sign in'
       requestBody:
@@ -91,19 +82,12 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/LocalSignInRequest'
               x-examples:
                 Example 1:
                   email: nanaaikinson2020@gmail.com
                   password: Pa$$w0rd
-              properties:
-                email:
-                  type: string
-                password:
-                  type: string
-              required:
-                - email
-                - password
+                  channel: tenant
   /c/auth/local/sign-up:
     post:
       summary: ''
@@ -115,7 +99,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResposne'
+                $ref: '#/components/schemas/AuthUserResponse'
       operationId: auth-local-sign-up
       description: 'Central: auth local sign up'
       requestBody:
@@ -123,27 +107,14 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/LocalSignUpRequest'
               x-examples:
                 Example 1:
                   firstName: Nana
                   lastName: Aikinson
                   email: nanaaikinson2020@gmail.com
                   password: Pa$$w0rd
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                email:
-                  type: string
-                password:
-                  type: string
-              required:
-                - firstName
-                - lastName
-                - email
-                - password
+                  channel: tenant
   /c/auth/verify-account:
     post:
       summary: ''
@@ -165,15 +136,10 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/VerifyAccountRequest'
               x-examples:
                 Example 1:
                   verificationCode: '78193620'
-              properties:
-                verificationCode:
-                  type: string
-              required:
-                - verificationCode
   /c/auth/resend-email-verification:
     post:
       summary: ''
@@ -195,15 +161,10 @@ paths:
         content:
           application/json:
             schema:
-              type: object
+              $ref: '#/components/schemas/ResendEmailVerificationRequest'
               x-examples:
                 Example 1:
                   verificationCode: '78193620'
-              properties:
-                email:
-                  type: string
-              required:
-                - email
     parameters: []
   /c/onboard-organization:
     post:
@@ -277,7 +238,7 @@ components:
           type: string
       required:
         - message
-    AuthUserResposne:
+    AuthUserResponse:
       type: object
       x-examples:
         Example 1:
@@ -345,6 +306,423 @@ components:
                 - expiresAt
         message:
           type: string
+      required:
+        - data
+        - message
+    SocialRequest:
+      title: SocialRequest
+      x-stoplight:
+        id: a1e8ace90050a
+      type: object
+      properties:
+        accessToken:
+          type: string
+        channel:
+          type: string
+          enum:
+            - admin
+            - mobile
+            - tenant
+      required:
+        - accessToken
+        - channel
+    LocalSignInRequest:
+      title: LocalSignInRequest
+      x-stoplight:
+        id: d1hms4p7i66i6
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        channel:
+          type: string
+          enum:
+            - admin
+            - mobile
+            - tenant
+      required:
+        - email
+        - password
+        - channel
+    LocalSignUpRequest:
+      title: LocalSignUpRequest
+      x-stoplight:
+        id: vfbvvpl8arhl9
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        channel:
+          type: string
+          enum:
+            - admin
+            - mobile
+            - tenant
+      required:
+        - firstName
+        - lastName
+        - email
+        - password
+        - channel
+    VerifyAccountRequest:
+      title: VerifyAccountRequest
+      x-stoplight:
+        id: cqjn3a193c7cg
+      type: object
+      properties:
+        verificationCode:
+          type: string
+      required:
+        - verificationCode
+    ResendEmailVerificationRequest:
+      title: ResendEmailVerificationRequest
+      x-stoplight:
+        id: b17z2fxztv14j
+      type: object
+      properties:
+        email:
+          type: string
+      required:
+        - email
+    Prayer:
+      type: object
+      x-examples:
+        Example 1:
+          id: 01H81MXPT49ZF0HXWKFWWHTAPE
+          title: Test title
+          description: Test description
+          createdAt: '2023-08-17T11:43:34.000000Z'
+          status: null
+          name: John Doe
+          email: john.doe@example.com
+          phoneNumber: null
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+        status:
+          type: string
+          nullable: true
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+          nullable: true
+      required:
+        - id
+        - title
+        - description
+        - createdAt
+        - status
+        - name
+        - email
+        - phoneNumber
+    PrayersResponse:
+      type: object
+      x-examples:
+        Example 1:
+          data:
+            - id: 01H81MXPT49ZF0HXWKFWWHTAPE
+              title: Test title
+              description: Test description
+              createdAt: '2023-08-17T11:43:34.000000Z'
+              status: null
+              name: John Doe
+              email: john.doe@example.com
+              phoneNumber: null
+          meta:
+            show: Showing 1 to 1 of 1 items
+            total: 1
+            count: 1
+            perPage: 10
+            currentPage: 1
+            totalPages: 1
+            links:
+              first: 'http://saas.test/api/t/prayer-requests?page=1'
+              last: 'http://saas.test/api/t/prayer-requests?page=1'
+              prev: null
+              next: null
+      description: Prayers response
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Prayer'
+        meta:
+          type: object
+          required:
+            - show
+            - total
+            - count
+            - perPage
+            - currentPage
+            - totalPages
+            - links
+          properties:
+            show:
+              type: string
+            total:
+              type: integer
+            count:
+              type: integer
+            perPage:
+              type: integer
+            currentPage:
+              type: integer
+            totalPages:
+              type: integer
+            links:
+              type: object
+              required:
+                - first
+                - last
+                - prev
+                - next
+              properties:
+                first:
+                  type: string
+                last:
+                  type: string
+                prev:
+                  type: string
+                  nullable: true
+                next:
+                  type: string
+                  nullable: true
+      required:
+        - data
+        - meta
+    Event:
+      type: object
+      x-examples:
+        Example 1:
+          id: 01H81T2GZ7P3H640YG2CKH4VXS
+          title: test
+          description: test description
+          startDate: '2020-10-10'
+          endDate: '2020-10-10'
+          location: null
+          published: true
+          createdAt: '2023-08-17T13:13:34.000000Z'
+          image: 'https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/central/events/01H81JEN6B744WS8HY6DS89N6V/1692278014_01H81T2GZAAFT3N0N8GAKGG9Z6.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230817%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230817T131339Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=cd9adcdf2587096e6a81e5e4b77679351d1fce630119f5067a1bcbecf00d3000'
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        location:
+          type: string
+          nullable: true
+        published:
+          type: boolean
+        createdAt:
+          type: string
+        image:
+          type: string
+          nullable: true
+      required:
+        - id
+        - title
+        - description
+        - startDate
+        - endDate
+        - location
+        - published
+        - createdAt
+        - image
+    EventsResponse:
+      type: object
+      x-examples:
+        Example 1:
+          data:
+            - id: 01H81T2GZ7P3H640YG2CKH4VXS
+              title: test
+              description: test description
+              startDate: '2020-10-10'
+              endDate: '2020-10-10'
+              location: null
+              published: true
+              createdAt: '2023-08-17T13:13:34.000000Z'
+              image: 'https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/central/events/01H81JEN6B744WS8HY6DS89N6V/1692278014_01H81T2GZAAFT3N0N8GAKGG9Z6.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230817%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230817T131339Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=cd9adcdf2587096e6a81e5e4b77679351d1fce630119f5067a1bcbecf00d3000'
+          meta:
+            show: Showing 1 to 1 of 1 items
+            total: 1
+            count: 1
+            perPage: 10
+            currentPage: 1
+            totalPages: 1
+            links:
+              first: 'http://saas.test/api/t/events?page=1'
+              last: 'http://saas.test/api/t/events?page=1'
+              prev: null
+              next: null
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        meta:
+          type: object
+          required:
+            - show
+            - total
+            - count
+            - perPage
+            - currentPage
+            - totalPages
+            - links
+          properties:
+            show:
+              type: string
+            total:
+              type: integer
+            count:
+              type: integer
+            perPage:
+              type: integer
+            currentPage:
+              type: integer
+            totalPages:
+              type: integer
+            links:
+              type: object
+              required:
+                - first
+                - last
+                - prev
+                - next
+              properties:
+                first:
+                  type: string
+                last:
+                  type: string
+                prev:
+                  type: string
+                  nullable: true
+                next:
+                  type: string
+                  nullable: true
+      required:
+        - data
+        - meta
+    StoreEventRequest:
+      title: StoreEventRequest
+      x-stoplight:
+        id: 6061s1v2isa6d
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        published:
+          type: boolean
+          default: false
+        image:
+          type: string
+          format: binary
+          nullable: true
+      required:
+        - title
+        - description
+        - startDate
+        - endDate
+        - published
+    UpdateEventRequest:
+      title: UpdateEventRequest
+      type: object
+      x-stoplight:
+        id: 9f233780ecb9e
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        published:
+          type: boolean
+          default: false
+        image:
+          type: string
+          format: binary
+        _method:
+          type: string
+          default: patch
+      required:
+        - title
+        - description
+        - startDate
+        - endDate
+        - published
+      description: ''
+    EventResponse:
+      type: object
+      x-examples:
+        Example 1:
+          message: Event created successfully.
+          data: {}
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Event'
+      required:
+        - message
+        - data
+    RefreshTokenResponse:
+      type: object
+      x-examples:
+        Example 1:
+          data:
+            accessToken: ''
+            expiresAt: ''
+            tokenType: ''
+          message: ''
+      properties:
+        data:
+          type: object
+          required:
+            - accessToken
+            - expiresAt
+            - tokenType
+          properties:
+            accessToken:
+              type: string
+            expiresAt:
+              type: string
+            tokenType:
+              type: string
+        message:
+          type: string
+          nullable: true
       required:
         - data
         - message

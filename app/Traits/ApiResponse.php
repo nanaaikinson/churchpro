@@ -156,7 +156,7 @@ trait ApiResponse
    */
   public function paginationResponse(LengthAwarePaginator $data, string $message = ''): JsonResponse
   {
-    $pagination = TransformPaginationResponseAction::run($data);
+    $pagination = $this->paginatorTransformer($data);
 
     return $this->successResponse($pagination);
   }
@@ -176,5 +176,36 @@ trait ApiResponse
     return $this->successResponse([
       'message' => $message
     ]);
+  }
+
+  public function paginatorTransformer(LengthAwarePaginator $data): array
+  {
+    $content = $data->getCollection();
+
+    // Show from 1 to 10 of 100 items
+    $from = ($data->currentPage() - 1) * $data->perPage() + 1;
+    $to = $from + $data->count() - 1;
+    $of = $data->total();
+    $showing = "Showing {$from} to {$to} of {$of} items";
+
+    $pagination = [
+      'data' => $content,
+      'meta' => [
+        'show' => $showing,
+        'total' => $data->total(),
+        'count' => $data->count(),
+        'per_page' => $data->perPage(),
+        'current_page' => $data->currentPage(),
+        'total_pages' => $data->lastPage(),
+        'links' => [
+          'first' => $data->url(1),
+          'last' => $data->url($data->lastPage()),
+          'prev' => $data->previousPageUrl(),
+          'next' => $data->nextPageUrl(),
+        ],
+      ]
+    ];
+
+    return $pagination;
   }
 }
