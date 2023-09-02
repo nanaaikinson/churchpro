@@ -386,11 +386,17 @@ components:
                     - 'null'
                 onboardingStep:
                   type: string
+                  enum:
+                    - account creation
+                    - account verification
+                    - tenant onboarding
+                    - tenant approval
+                    - complete
                 organizations:
                   type: array
                   items:
                     $ref: '#/components/schemas/Organization'
-            token:
+            tokens:
               type: object
               properties:
                 accessToken:
