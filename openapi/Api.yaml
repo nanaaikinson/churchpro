@@ -182,7 +182,28 @@ paths:
                 Example 1:
                   verificationCode: '78193620'
     parameters: []
-  /c/onboard-organization:
+  /c/files/upload:
+    post:
+      summary: Your GET endpoint
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+      operationId: files-upload
+      description: 'Central: Files upload'
+      security:
+        - JWT: []
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FileUploadRequest'
+  /c/organizations/onboard:
     post:
       summary: ''
       tags:
@@ -202,7 +223,7 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: '#/components/schemas/OnboardingRequest'
     parameters: []
@@ -255,6 +276,9 @@ components:
           phoneNumber: ''
           location: ''
           logo: ''
+      x-stoplight:
+        id: 3a96f6c69399b
+      title: OnboardingRequest
       properties:
         name:
           type: string
@@ -270,17 +294,12 @@ components:
           type:
             - string
             - 'null'
-          format: binary
       required:
         - name
         - roleAtChurch
         - defaultBranch
         - phoneNumber
         - location
-      x-stoplight:
-        id: 3a96f6c69399b
-      title: OnboardingRequest
-      description: ''
     MessageResponse:
       title: MessageResponse
       x-stoplight:
@@ -937,6 +956,48 @@ components:
                     - 'null'
       required:
         - meta
+    FileUploadRequest:
+      title: FileUploadRequest
+      x-stoplight:
+        id: ivjnukgur6ujw
+      type: object
+      properties:
+        file:
+          type: string
+          format: binary
+        contentType:
+          type: string
+          enum:
+            - logo
+            - excerpt
+            - avatar
+      required:
+        - file
+        - contentType
+    FileUploadResponse:
+      type: object
+      x-examples:
+        Example 1:
+          data:
+            id: 01H9AV5QTTFMYEVD7D5HVD4642
+            url: 'https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/logos/1693654896_01H9AV5KRN6HQA22D3PE95K9QX.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230902%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230902T114140Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=a0b2dd0d1d56732d2b450033a0bd4cd1f7cf9d2e001c0a29669764e28a33a19d'
+          message: ''
+      properties:
+        data:
+          type: object
+          required:
+            - id
+            - url
+          properties:
+            id:
+              type: string
+            url:
+              type: string
+        message:
+          type: string
+      required:
+        - data
+        - message
   securitySchemes:
     JWT:
       type: http

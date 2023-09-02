@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Auth;
+namespace App\Actions\Central\Auth;
 
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Auth;
+namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
 use App\Enums\UserOnboardingStepEnum;
@@ -9,12 +9,12 @@ use App\Mail\AccountVerificationMail;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use BenSampo\Enum\Rules\EnumValue;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Illuminate\Support\Facades\DB;
 
 class LocalSignUp
 {
