@@ -2,22 +2,28 @@
 
 namespace App\Actions\Central\Auth;
 
+use App\Rules\IsBoolean;
 use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
+use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class GetUser
 {
   use AsAction, ApiResponse;
 
-  public function handle(Request $request)
+  public function rules(): array
+  {
+    return ['with_relations' => ['nullable', new IsBoolean]];
+  }
+
+  public function handle(ActionRequest $request)
   {
     try {
       /**
        * @var \App\Models\User $user
        */
       $user = $request->user('api');
-      $relations = (bool)$user->email_verified_at;
+      $relations = $user->email_verified_at && $request->input('with_relations');
 
       return $this->dataResponse(Helper::user($user, $relations), 'Successfully retrieved user.');
     } catch (\Exception $e) {
