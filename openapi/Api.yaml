@@ -282,6 +282,9 @@ components:
       properties:
         name:
           type: string
+        email:
+          type: string
+          format: email
         roleAtChurch:
           type: string
         defaultBranch:
@@ -296,6 +299,7 @@ components:
             - 'null'
       required:
         - name
+        - email
         - roleAtChurch
         - defaultBranch
         - phoneNumber

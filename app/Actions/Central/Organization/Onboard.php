@@ -7,7 +7,9 @@ use App\Enums\OrganizationApproval;
 use App\Enums\OrganizationStatus;
 use App\Enums\RoleAtChurch;
 use App\Enums\UserOnboardingStepEnum;
+use App\Http\Requests\StoreOrganizationRequest;
 use App\Models\Organization;
+use App\Models\User;
 use App\Services\FileService;
 use App\Traits\ApiResponse;
 use BenSampo\Enum\Rules\EnumValue;
@@ -22,19 +24,7 @@ class Onboard
 {
   use AsAction, ApiResponse;
 
-  public function rules(): array
-  {
-    return [
-      'name' => ['required', 'string', 'max:191'],
-      'role_at_church' => ['required', 'string', new EnumValue(RoleAtChurch::class)],
-      'default_branch' => ['required', 'string', 'max:191'],
-      'phone_number' => ['required', 'string', 'max:12'],
-      'location' => ['required', 'string', 'max:191'],
-      'logo' => ['nullable', 'string', Rule::exists('media', 'id')],
-    ];
-  }
-
-  public function handle(ActionRequest $request): \Illuminate\Http\JsonResponse
+  public function handle(StoreOrganizationRequest $request): \Illuminate\Http\JsonResponse
   {
     DB::beginTransaction();
 
@@ -42,7 +32,7 @@ class Onboard
 
     try {
       /**
-       * @var \App\Models\User $user
+       * @var User $user
        */
       $user = $request->user('api');
       $logo = $request->input('logo');
@@ -55,6 +45,8 @@ class Onboard
         'data' => json_encode([
           'phone_number' => $request->input('phone_number'),
           'location' => $request->input('location'),
+          'email' => $request->input('email'),
+          'representative' => ['role' => $request->input('role_at_church')]
         ])
       ]);
 
@@ -84,7 +76,7 @@ class Onboard
       // Persist to db
       DB::commit();
 
-      return $this->messageResponse('Your organization\'s has been on-boarded successfully. Please wait for approval.');
+      return $this->messageResponse('Your organization has been on-boarded successfully. Please wait for approval.');
 
     } catch (\Exception $e) {
       DB::rollBack();
