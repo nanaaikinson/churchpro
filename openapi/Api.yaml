@@ -131,6 +131,28 @@ paths:
       description: 'Central: auth refresh token'
       security:
         - JWT: []
+  /c/auth/user:
+    get:
+      summary: ''
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthUserResponse'
+      operationId: auth-user
+      description: 'Central: auth user'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: boolean
+          in: query
+          name: withRelations
+    parameters: []
   /c/auth/verify-account:
     post:
       summary: ''
