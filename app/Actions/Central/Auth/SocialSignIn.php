@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Auth;
+namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
 use App\Enums\UserStatusEnum;

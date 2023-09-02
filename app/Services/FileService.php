@@ -80,7 +80,7 @@ class FileService
    *
    * @return string|null
    */
-  public static function getFileUrlFromMedia(Media|null $media)
+  public static function getFileUrlFromMedia(Media|null $media): ?string
   {
     if (!$media) {
       return null;
@@ -113,9 +113,6 @@ class FileService
       FileUploadContentTypeEnum::Excerpt => 'uploads/excerpts'
     };
 
-    return [
-      'filename' => $filename,
-      'path' => $path,
-    ];
+    return [$filename, $path];
   }
 }

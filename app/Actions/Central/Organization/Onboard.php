@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Organization;
+namespace App\Actions\Central\Organization;
 
 use App\Enums\FileUploadContentTypeEnum;
 use App\Enums\OrganizationApproval;
@@ -11,10 +11,11 @@ use App\Models\Organization;
 use App\Services\FileService;
 use App\Traits\ApiResponse;
 use BenSampo\Enum\Rules\EnumValue;
+use DB;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
-use DB;
 use Str;
 
 class Onboard
@@ -29,11 +30,11 @@ class Onboard
       'default_branch' => ['required', 'string', 'max:191'],
       'phone_number' => ['required', 'string', 'max:12'],
       'location' => ['required', 'string', 'max:191'],
-      'logo' => ['nullable', File::types(['jpg', 'jpeg', 'png'])->max(3 * 1024)],
+      'logo' => ['nullable', 'string', Rule::exists('media', 'id')],
     ];
   }
 
-  public function handle(ActionRequest $request)
+  public function handle(ActionRequest $request): \Illuminate\Http\JsonResponse
   {
     DB::beginTransaction();
 
@@ -44,6 +45,7 @@ class Onboard
        * @var \App\Models\User $user
        */
       $user = $request->user('api');
+      $logo = $request->input('logo');
 
       // Create organization
       $organization = Organization::create([
@@ -74,13 +76,9 @@ class Onboard
       // Update user onboarding step
       $user->update(['onboarding_step' => UserOnboardingStepEnum::TenantApproval]);
 
-      // Upload logo if any
-      if ($request->hasFile('logo')) {
-        dispatch(function () use ($request, $organization) {
-          $media = FileService::uploadFromSource($request->file('logo'), FileUploadContentTypeEnum::Logo);
-
-          $organization->attachMedia($media, 'logo');
-        })->afterCommit();
+      // Attach logo if any
+      if ($logo) {
+        $organization->attachMedia($logo, 'logo');
       }
 
       // Persist to db
