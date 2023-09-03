@@ -3,14 +3,14 @@ x-stoplight:
   id: 3lghmwqbc6uha
 info:
   title: Church Sync Openapi
-  version: '1.0'
+  version: "1.0"
   description: Church Sync Openapi
   contact:
     name: Nana Kwesi Ofosu-Aikins
     email: nanaaikinson24@gmail.com
     url: nanaaikinson.com
 servers:
-  - url: 'https://churchsync.test/api'
+  - url: "https://churchsync.test/api"
     description: Local
 tags:
   - name: admin
@@ -20,69 +20,69 @@ tags:
 paths:
   /c/auth/social/sign-in:
     post:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResponse'
+                $ref: "#/components/schemas/AuthUserResponse"
       operationId: auth-social-sign-in
-      description: 'Central: auth social sign up'
+      description: "Central: auth social sign up"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SocialRequest'
+              $ref: "#/components/schemas/SocialRequest"
               x-examples:
                 Example 1:
                   accessToken: ya29.a0AfB_byBe15ANRb_bdhKo6RNP3VO8f_ReVuCGl1MBUnL6XhRXktpH4OiZGgLpSq8qk2cgXs2K2cncGkNccfbBA2It9SLoOEgfkl2DyUPV7_PDrzaStX3T-tTWnCOgOeornTfAAnNf9qy9MIdldkc07r86aSG3vcDKqsg7-gaCgYKAeISARMSFQHsvYlspqE5ZiSu_8mBEuCxGWEsuw0173
                   channel: tenant
-        description: ''
+        description: ""
   /c/auth/social/sign-up:
     post:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResponse'
+                $ref: "#/components/schemas/AuthUserResponse"
       operationId: auth-social-sign-up
-      description: 'Central: auth social sign up'
+      description: "Central: auth social sign up"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SocialRequest'
+              $ref: "#/components/schemas/SocialRequest"
   /c/auth/local/sign-in:
     post:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResponse'
+                $ref: "#/components/schemas/AuthUserResponse"
       operationId: auth-local-sign-in
-      description: 'Central: auth local sign in'
+      description: "Central: auth local sign in"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocalSignInRequest'
+              $ref: "#/components/schemas/LocalSignInRequest"
               x-examples:
                 Example 1:
                   email: nanaaikinson2020@gmail.com
@@ -90,24 +90,24 @@ paths:
                   channel: tenant
   /c/auth/local/sign-up:
     post:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResponse'
+                $ref: "#/components/schemas/AuthUserResponse"
       operationId: auth-local-sign-up
-      description: 'Central: auth local sign up'
+      description: "Central: auth local sign up"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LocalSignUpRequest'
+              $ref: "#/components/schemas/LocalSignUpRequest"
               x-examples:
                 Example 1:
                   firstName: Nana
@@ -117,34 +117,34 @@ paths:
                   channel: tenant
   /c/auth/refresh-token:
     get:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RefreshTokenResponse'
+                $ref: "#/components/schemas/RefreshTokenResponse"
       operationId: auth-refresh-token
-      description: 'Central: auth refresh token'
+      description: "Central: auth refresh token"
       security:
         - JWT: []
   /c/auth/user:
     get:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AuthUserResponse'
+                $ref: "#/components/schemas/AuthUserResponse"
       operationId: auth-user
-      description: 'Central: auth user'
+      description: "Central: auth user"
       security:
         - JWT: []
       parameters:
@@ -155,54 +155,54 @@ paths:
     parameters: []
   /c/auth/verify-account:
     post:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
+                $ref: "#/components/schemas/MessageResponse"
       operationId: auth-verify-account
       security:
         - JWT: []
-      description: 'Central: Auth verify account'
+      description: "Central: Auth verify account"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VerifyAccountRequest'
+              $ref: "#/components/schemas/VerifyAccountRequest"
               x-examples:
                 Example 1:
-                  verificationCode: '78193620'
+                  verificationCode: "78193620"
   /c/auth/resend-email-verification:
     post:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
+                $ref: "#/components/schemas/MessageResponse"
       operationId: auth-resend-email-verification
       security:
         - JWT: []
-      description: 'Central: Auth resend email verification'
+      description: "Central: Auth resend email verification"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResendEmailVerificationRequest'
+              $ref: "#/components/schemas/ResendEmailVerificationRequest"
               x-examples:
                 Example 1:
-                  verificationCode: '78193620'
+                  verificationCode: "78193620"
     parameters: []
   /c/files/upload:
     post:
@@ -210,35 +210,35 @@ paths:
       tags:
         - central
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FileUploadResponse'
+                $ref: "#/components/schemas/FileUploadResponse"
       operationId: files-upload
-      description: 'Central: Files upload'
+      description: "Central: Files upload"
       security:
         - JWT: []
       requestBody:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/FileUploadRequest'
+              $ref: "#/components/schemas/FileUploadRequest"
   /c/organizations/onboard:
     post:
-      summary: ''
+      summary: ""
       tags:
         - central
       responses:
-        '201':
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
+                $ref: "#/components/schemas/MessageResponse"
       operationId: organization-onboarding
-      description: 'Central: Organzation onboarding'
+      description: "Central: Organzation onboarding"
       parameters: []
       security:
         - JWT: []
@@ -247,35 +247,35 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OnboardingRequest'
+              $ref: "#/components/schemas/OnboardingRequest"
     parameters: []
   /m/prayers:
     get:
-      summary: ''
+      summary: ""
       tags:
         - mobile
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MobilePrayers'
+                $ref: "#/components/schemas/MobilePrayers"
       operationId: client-prayer-requests
       security:
         - JWT: []
-      description: 'Mobile: Get prayer-requests'
+      description: "Mobile: Get prayer-requests"
     post:
-      summary: ''
+      summary: ""
       operationId: client-request-prayer
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MessageResponse'
-      description: 'Client: request for a prayer'
+                $ref: "#/components/schemas/MessageResponse"
+      description: "Client: request for a prayer"
       security:
         - JWT: []
       requestBody:
@@ -283,21 +283,219 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PrayerRequest'
+              $ref: "#/components/schemas/PrayerRequest"
       tags:
         - mobile
+  /t/organization:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - tenant
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Organization"
+      operationId: get-organization
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+      description: "Tenant: Get organization details"
+    patch:
+      summary: ""
+      operationId: update-organization
+      responses:
+        "200":
+          description: OK
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateOrganizationRequest"
+      tags:
+        - tenant
+      description: "Tenant: Update organization"
+  /t/prayers:
+    get:
+      summary: ""
+      tags:
+        - tenant
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    data:
+                      - id: 01H9DMZ4P2XB62T3H188HJVZ96
+                        title: Test prayer request
+                        description: This is a test description
+                        createdAt: "2023-09-03T13:50:56.000000Z"
+                        status: null
+                        name: Nana Aikinson
+                        email: nanaaikinson2020@gmail.com
+                        phoneNumber: null
+                    meta:
+                      show: Showing 1 to 1 of 1 items
+                      total: 1
+                      count: 1
+                      perPage: 10
+                      currentPage: 1
+                      totalPages: 1
+                      links:
+                        first: "https://chsync.test/api/t/prayers?page=1"
+                        last: "https://chsync.test/api/t/prayers?page=1"
+                        prev: null
+                        next: null
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Prayer"
+                  meta:
+                    type: object
+                    required:
+                      - show
+                      - total
+                      - count
+                      - perPage
+                      - currentPage
+                      - totalPages
+                      - links
+                    properties:
+                      show:
+                        type: string
+                      total:
+                        type: integer
+                      count:
+                        type: integer
+                      perPage:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      links:
+                        type: object
+                        required:
+                          - first
+                          - last
+                          - prev
+                          - next
+                        properties:
+                          first:
+                            type: string
+                          last:
+                            type: string
+                          prev:
+                            type:
+                              - string
+                              - "null"
+                          next:
+                            type:
+                              - string
+                              - "null"
+                required:
+                  - data
+                  - meta
+      operationId: get-prayers
+      description: "Tenant: Get prayers"
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+        - schema:
+            type: string
+          in: query
+          name: page
+          description: Current page
+        - schema:
+            type: string
+          in: query
+          name: limit
+          description: Number of items
+        - schema:
+            type: string
+          in: query
+          name: search
+          description: Search query
+  "/t/prayers/{id}":
+    get:
+      summary: ""
+      tags:
+        - tenant
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Prayer"
+                  message:
+                    type:
+                      - string
+                      - "null"
+                required:
+                  - data
+                  - message
+      operationId: get-prayer
+      description: "Tenant: Get prayer"
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
 components:
   schemas:
     OnboardingRequest:
       type: object
       x-examples:
         Example 1:
-          name: ''
-          roleAtChurch: ''
-          defaultBranch: ''
-          phoneNumber: ''
-          location: ''
-          logo: ''
+          name: ""
+          roleAtChurch: ""
+          defaultBranch: ""
+          phoneNumber: ""
+          location: ""
+          logo: ""
       x-stoplight:
         id: 3a96f6c69399b
       title: OnboardingRequest
@@ -318,7 +516,7 @@ components:
         logo:
           type:
             - string
-            - 'null'
+            - "null"
       required:
         - name
         - email
@@ -350,7 +548,7 @@ components:
               organizations: []
             token:
               accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvbG9jYWwvc2lnbi11cCIsImlhdCI6MTY5MzM1NjMyOCwiZXhwIjoxNjkzMzYzNTI4LCJuYmYiOjE2OTMzNTYzMjgsImp0aSI6Imh6ZGhvbU5XeTNQQWI3VzIiLCJzdWIiOiIwMUg5MVlFMVE5R1FEMEgxNEdYUFo5UFJTRiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJjaGFubmVsIjoidGVuYW50In0.fMGScLG9qDsYbSUManZnhmHQ5tLhsd_NiXkstRb5DUs
-              expiresAt: '2023-08-31T00:45:28.689725Z'
+              expiresAt: "2023-08-31T00:45:28.689725Z"
               refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvbG9jYWwvc2lnbi11cCIsImlhdCI6MTY5MzM1NjMyOCwiZXhwIjoxNjkzNDQyNzI4LCJuYmYiOjE2OTMzNTYzMjgsImp0aSI6IlczTmdOVE9rMUlra0NISDIiLCJzdWIiOiIwMUg5MVlFMVE5R1FEMEgxNEdYUFo5UFJTRiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJjaGFubmVsIjoidGVuYW50In0.H5do1rZpoWDd5AX--4BjA3cH366XEWVY3V2Sr0Z3lek
           message: |-
             Thank you for signing up! We're thrilled to have you join Church Sync.
@@ -383,7 +581,7 @@ components:
                 avatar:
                   type:
                     - string
-                    - 'null'
+                    - "null"
                 onboardingStep:
                   type: string
                   enum:
@@ -395,18 +593,18 @@ components:
                 organizations:
                   type: array
                   items:
-                    $ref: '#/components/schemas/Organization'
+                    $ref: "#/components/schemas/Organization"
             tokens:
               type: object
               properties:
-                accessToken:
+                access:
                   type: string
                 expiresAt:
                   type: string
-                refreshToken:
+                refresh:
                   type: string
               required:
-                - accessToken
+                - access
                 - expiresAt
         message:
           type: string
@@ -503,7 +701,7 @@ components:
           id: 01H81MXPT49ZF0HXWKFWWHTAPE
           title: Test title
           description: Test description
-          createdAt: '2023-08-17T11:43:34.000000Z'
+          createdAt: "2023-08-17T11:43:34.000000Z"
           status: null
           name: John Doe
           email: john.doe@example.com
@@ -518,14 +716,18 @@ components:
         createdAt:
           type: string
         status:
-          type: string
+          type:
+            - string
+            - "null"
           nullable: true
         name:
           type: string
         email:
           type: string
         phoneNumber:
-          type: string
+          type:
+            - string
+            - "null"
           nullable: true
       required:
         - id
@@ -544,7 +746,7 @@ components:
             - id: 01H81MXPT49ZF0HXWKFWWHTAPE
               title: Test title
               description: Test description
-              createdAt: '2023-08-17T11:43:34.000000Z'
+              createdAt: "2023-08-17T11:43:34.000000Z"
               status: null
               name: John Doe
               email: john.doe@example.com
@@ -557,8 +759,8 @@ components:
             currentPage: 1
             totalPages: 1
             links:
-              first: 'http://saas.test/api/t/prayer-requests?page=1'
-              last: 'http://saas.test/api/t/prayer-requests?page=1'
+              first: "http://saas.test/api/t/prayer-requests?page=1"
+              last: "http://saas.test/api/t/prayer-requests?page=1"
               prev: null
               next: null
       description: Prayers response
@@ -566,7 +768,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Prayer'
+            $ref: "#/components/schemas/Prayer"
         meta:
           type: object
           required:
@@ -618,12 +820,12 @@ components:
           id: 01H81T2GZ7P3H640YG2CKH4VXS
           title: test
           description: test description
-          startDate: '2020-10-10'
-          endDate: '2020-10-10'
+          startDate: "2020-10-10"
+          endDate: "2020-10-10"
           location: null
           published: true
-          createdAt: '2023-08-17T13:13:34.000000Z'
-          image: 'https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/central/events/01H81JEN6B744WS8HY6DS89N6V/1692278014_01H81T2GZAAFT3N0N8GAKGG9Z6.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230817%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230817T131339Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=cd9adcdf2587096e6a81e5e4b77679351d1fce630119f5067a1bcbecf00d3000'
+          createdAt: "2023-08-17T13:13:34.000000Z"
+          image: "https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/central/events/01H81JEN6B744WS8HY6DS89N6V/1692278014_01H81T2GZAAFT3N0N8GAKGG9Z6.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230817%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230817T131339Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=cd9adcdf2587096e6a81e5e4b77679351d1fce630119f5067a1bcbecf00d3000"
       properties:
         id:
           type: string
@@ -663,12 +865,12 @@ components:
             - id: 01H81T2GZ7P3H640YG2CKH4VXS
               title: test
               description: test description
-              startDate: '2020-10-10'
-              endDate: '2020-10-10'
+              startDate: "2020-10-10"
+              endDate: "2020-10-10"
               location: null
               published: true
-              createdAt: '2023-08-17T13:13:34.000000Z'
-              image: 'https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/central/events/01H81JEN6B744WS8HY6DS89N6V/1692278014_01H81T2GZAAFT3N0N8GAKGG9Z6.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230817%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230817T131339Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=cd9adcdf2587096e6a81e5e4b77679351d1fce630119f5067a1bcbecf00d3000'
+              createdAt: "2023-08-17T13:13:34.000000Z"
+              image: "https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/central/events/01H81JEN6B744WS8HY6DS89N6V/1692278014_01H81T2GZAAFT3N0N8GAKGG9Z6.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230817%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230817T131339Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=cd9adcdf2587096e6a81e5e4b77679351d1fce630119f5067a1bcbecf00d3000"
           meta:
             show: Showing 1 to 1 of 1 items
             total: 1
@@ -677,15 +879,15 @@ components:
             currentPage: 1
             totalPages: 1
             links:
-              first: 'http://saas.test/api/t/events?page=1'
-              last: 'http://saas.test/api/t/events?page=1'
+              first: "http://saas.test/api/t/events?page=1"
+              last: "http://saas.test/api/t/events?page=1"
               prev: null
               next: null
       properties:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Event'
+            $ref: "#/components/schemas/Event"
         meta:
           type: object
           required:
@@ -786,7 +988,7 @@ components:
         - startDate
         - endDate
         - published
-      description: ''
+      description: ""
     EventResponse:
       type: object
       x-examples:
@@ -797,7 +999,7 @@ components:
         message:
           type: string
         data:
-          $ref: '#/components/schemas/Event'
+          $ref: "#/components/schemas/Event"
       required:
         - message
         - data
@@ -806,10 +1008,10 @@ components:
       x-examples:
         Example 1:
           data:
-            accessToken: ''
-            expiresAt: ''
-            tokenType: ''
-          message: ''
+            accessToken: ""
+            expiresAt: ""
+            tokenType: ""
+          message: ""
       properties:
         data:
           type: object
@@ -837,7 +1039,7 @@ components:
           likes: 0
           logo: null
           data:
-            phoneNumber: '0241726707'
+            phoneNumber: "0241726707"
             location: Manfe
       properties:
         id:
@@ -849,17 +1051,61 @@ components:
         likes:
           type: integer
         logo:
-          type: 'null'
+          type:
+            - string
+            - "null"
         data:
           type: object
           required:
             - phoneNumber
             - location
+            - about
+            - email
+            - socials
           properties:
             phoneNumber:
               type: string
             location:
               type: string
+            about:
+              type:
+                - string
+                - "null"
+            email:
+              type: string
+            socials:
+              type:
+                - object
+                - "null"
+              properties:
+                facebook:
+                  type:
+                    - string
+                    - "null"
+                x:
+                  type:
+                    - string
+                    - "null"
+                instagram:
+                  type:
+                    - string
+                    - "null"
+                youtube:
+                  type:
+                    - string
+                    - "null"
+                threads:
+                  type:
+                    - string
+                    - "null"
+                tiktok:
+                  type:
+                    - string
+                    - "null"
+                website:
+                  type:
+                    - string
+                    - "null"
       required:
         - id
         - name
@@ -897,7 +1143,7 @@ components:
                 id: 01H93VYAA0HK3PE4SNFN1RC5A4
                 name: Light house
                 logo: null
-              createdAt: '2023-09-01T19:05:14.000000Z'
+              createdAt: "2023-09-01T19:05:14.000000Z"
           meta:
             show: Showing 1 to 1 of 1 items
             total: 1
@@ -906,8 +1152,8 @@ components:
             currentPage: 1
             totalPages: 1
             links:
-              first: 'https://chsync.test/api/m/prayers?page=1'
-              last: 'https://chsync.test/api/m/prayers?page=1'
+              first: "https://chsync.test/api/m/prayers?page=1"
+              last: "https://chsync.test/api/m/prayers?page=1"
               prev: null
               next: null
       properties:
@@ -934,7 +1180,7 @@ components:
                   name:
                     type: string
                   logo:
-                    type: 'null'
+                    type: "null"
               createdAt:
                 type: string
             required:
@@ -981,11 +1227,11 @@ components:
                 prev:
                   type:
                     - string
-                    - 'null'
+                    - "null"
                 next:
                   type:
                     - string
-                    - 'null'
+                    - "null"
       required:
         - meta
     FileUploadRequest:
@@ -1012,8 +1258,8 @@ components:
         Example 1:
           data:
             id: 01H9AV5QTTFMYEVD7D5HVD4642
-            url: 'https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/logos/1693654896_01H9AV5KRN6HQA22D3PE95K9QX.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230902%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230902T114140Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=a0b2dd0d1d56732d2b450033a0bd4cd1f7cf9d2e001c0a29669764e28a33a19d'
-          message: ''
+            url: "https://churchhub-testuploads.s3.eu-west-2.amazonaws.com/uploads/logos/1693654896_01H9AV5KRN6HQA22D3PE95K9QX.jpg?X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAWYEDV5MAY23AGOU4%2F20230902%2Feu-west-2%2Fs3%2Faws4_request&X-Amz-Date=20230902T114140Z&X-Amz-SignedHeaders=host&X-Amz-Expires=86400&X-Amz-Signature=a0b2dd0d1d56732d2b450033a0bd4cd1f7cf9d2e001c0a29669764e28a33a19d"
+          message: ""
       properties:
         data:
           type: object
@@ -1030,6 +1276,72 @@ components:
       required:
         - data
         - message
+    UpdateOrganizationRequest:
+      type: object
+      x-examples:
+        Example 1:
+          email: nanaaikinson24@gmail.com
+          name: Light house
+          phoneNumber: "0241726707"
+          location: Manfe
+          socials:
+            facebook: "@lighthouse"
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        phoneNumber:
+          type: string
+        location:
+          type: string
+        logo:
+          type:
+            - string
+            - "null"
+        about:
+          type:
+            - string
+            - "null"
+        socials:
+          type: object
+          properties:
+            facebook:
+              type:
+                - string
+                - "null"
+            x:
+              type:
+                - string
+                - "null"
+            youtube:
+              type:
+                - string
+                - "null"
+            instagram:
+              type:
+                - string
+                - "null"
+            tiktok:
+              type:
+                - string
+                - "null"
+            threads:
+              type:
+                - string
+                - "null"
+            website:
+              type:
+                - string
+                - "null"
+      required:
+        - email
+        - name
+        - phoneNumber
+        - location
+        - logo
+        - about
+        - socials
   securitySchemes:
     JWT:
       type: http

@@ -2,6 +2,7 @@
 
 namespace App\Actions\Mobile\Prayers;
 
+use App\Http\Resources\PrayerResource;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -21,17 +22,7 @@ class Index
       $prayers = $user->prayers()->with('organization')->paginate(10);
 
       $prayers->getCollection()->transform(function ($item) {
-        return [
-          'id' => $item->id,
-          'title' => $item->title,
-          'description' => $item->description,
-          'organization' => [
-            'id' => $item->organization->id,
-            'name' => $item->organization->name,
-            'logo' => $item->organization->logo,
-          ],
-          'created_at' => $item->created_at,
-        ];
+        return PrayerResource::make($item);
       });
 
       return $this->paginationResponse($prayers);
