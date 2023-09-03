@@ -286,6 +286,204 @@ paths:
               $ref: '#/components/schemas/PrayerRequest'
       tags:
         - mobile
+  /t/organization:
+    get:
+      summary: Your GET endpoint
+      tags:
+        - tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+      operationId: get-organization
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+      description: 'Tenant: Get organization details'
+    patch:
+      summary: ''
+      operationId: update-organization
+      responses:
+        '200':
+          description: OK
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrganizationRequest'
+      tags:
+        - tenant
+      description: 'Tenant: Update organization'
+  /t/prayers:
+    get:
+      summary: ''
+      tags:
+        - tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                x-examples:
+                  Example 1:
+                    data:
+                      - id: 01H9DMZ4P2XB62T3H188HJVZ96
+                        title: Test prayer request
+                        description: This is a test description
+                        createdAt: '2023-09-03T13:50:56.000000Z'
+                        status: null
+                        name: Nana Aikinson
+                        email: nanaaikinson2020@gmail.com
+                        phoneNumber: null
+                    meta:
+                      show: Showing 1 to 1 of 1 items
+                      total: 1
+                      count: 1
+                      perPage: 10
+                      currentPage: 1
+                      totalPages: 1
+                      links:
+                        first: 'https://chsync.test/api/t/prayers?page=1'
+                        last: 'https://chsync.test/api/t/prayers?page=1'
+                        prev: null
+                        next: null
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Prayer'
+                  meta:
+                    type: object
+                    required:
+                      - show
+                      - total
+                      - count
+                      - perPage
+                      - currentPage
+                      - totalPages
+                      - links
+                    properties:
+                      show:
+                        type: string
+                      total:
+                        type: integer
+                      count:
+                        type: integer
+                      perPage:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      links:
+                        type: object
+                        required:
+                          - first
+                          - last
+                          - prev
+                          - next
+                        properties:
+                          first:
+                            type: string
+                          last:
+                            type: string
+                          prev:
+                            type:
+                              - string
+                              - 'null'
+                          next:
+                            type:
+                              - string
+                              - 'null'
+                required:
+                  - data
+                  - meta
+      operationId: get-prayers
+      description: 'Tenant: Get prayers'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+        - schema:
+            type: string
+          in: query
+          name: page
+          description: Current page
+        - schema:
+            type: string
+          in: query
+          name: limit
+          description: Number of items
+        - schema:
+            type: string
+          in: query
+          name: search
+          description: Search query
+  '/t/prayers/{id}':
+    get:
+      summary: ''
+      tags:
+        - tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/Prayer'
+                  message:
+                    type:
+                      - string
+                      - 'null'
+                required:
+                  - data
+                  - message
+      operationId: get-prayer
+      description: 'Tenant: Get prayer'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
 components:
   schemas:
     OnboardingRequest:
@@ -518,14 +716,18 @@ components:
         createdAt:
           type: string
         status:
-          type: string
+          type:
+            - string
+            - 'null'
           nullable: true
         name:
           type: string
         email:
           type: string
         phoneNumber:
-          type: string
+          type:
+            - string
+            - 'null'
           nullable: true
       required:
         - id
@@ -849,17 +1051,61 @@ components:
         likes:
           type: integer
         logo:
-          type: 'null'
+          type:
+            - string
+            - 'null'
         data:
           type: object
           required:
             - phoneNumber
             - location
+            - about
+            - email
+            - socials
           properties:
             phoneNumber:
               type: string
             location:
               type: string
+            about:
+              type:
+                - string
+                - 'null'
+            email:
+              type: string
+            socials:
+              type:
+                - object
+                - 'null'
+              properties:
+                facebook:
+                  type:
+                    - string
+                    - 'null'
+                x:
+                  type:
+                    - string
+                    - 'null'
+                instagram:
+                  type:
+                    - string
+                    - 'null'
+                youtube:
+                  type:
+                    - string
+                    - 'null'
+                threads:
+                  type:
+                    - string
+                    - 'null'
+                tiktok:
+                  type:
+                    - string
+                    - 'null'
+                website:
+                  type:
+                    - string
+                    - 'null'
       required:
         - id
         - name
@@ -1030,6 +1276,72 @@ components:
       required:
         - data
         - message
+    UpdateOrganizationRequest:
+      type: object
+      x-examples:
+        Example 1:
+          email: nanaaikinson24@gmail.com
+          name: Light house
+          phoneNumber: '0241726707'
+          location: Manfe
+          socials:
+            facebook: '@lighthouse'
+      properties:
+        email:
+          type: string
+        name:
+          type: string
+        phoneNumber:
+          type: string
+        location:
+          type: string
+        logo:
+          type:
+            - string
+            - 'null'
+        about:
+          type:
+            - string
+            - 'null'
+        socials:
+          type: object
+          properties:
+            facebook:
+              type:
+                - string
+                - 'null'
+            x:
+              type:
+                - string
+                - 'null'
+            youtube:
+              type:
+                - string
+                - 'null'
+            instagram:
+              type:
+                - string
+                - 'null'
+            tiktok:
+              type:
+                - string
+                - 'null'
+            threads:
+              type:
+                - string
+                - 'null'
+            website:
+              type:
+                - string
+                - 'null'
+      required:
+        - email
+        - name
+        - phoneNumber
+        - location
+        - logo
+        - about
+        - socials
   securitySchemes:
     JWT:
       type: http

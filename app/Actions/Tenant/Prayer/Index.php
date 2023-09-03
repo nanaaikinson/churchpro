@@ -2,6 +2,7 @@
 
 namespace App\Actions\Tenant\Prayer;
 
+use App\Http\Resources\PrayerResource;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -15,7 +16,7 @@ class Index
     try {
       $tenant = tenant();
       $currentPage = $request->get('page', 1);
-      $perPage = $request->get('per_page', 10);
+      $perPage = $request->get('limit', 10);
       $search = $request->get('search', '');
 
       $prayers = $tenant->prayers()
@@ -31,16 +32,7 @@ class Index
         ->paginate($perPage, ['*'], 'page', $currentPage);
 
       $prayers->getCollection()->transform(function ($prayer) {
-        return [
-          'id' => $prayer->id,
-          'title' => $prayer->title,
-          'description' => $prayer->description,
-          'created_at' => $prayer->created_at,
-          'status' => null,
-          'name' => $prayer->user->name,
-          'email' => $prayer->user->email,
-          'phone_number' => null,
-        ];
+        return PrayerResource::make($prayer, true);
       });
 
       return $this->paginationResponse($prayers, 'Successfully retrieved prayers.');
