@@ -665,7 +665,6 @@ components:
         channel:
           type: string
           enum:
-            - admin
             - mobile
             - tenant
       required:
