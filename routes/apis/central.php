@@ -19,7 +19,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('user', \App\Actions\Central\Auth\GetUser::class);
     Route::get('refresh-token', \App\Actions\Central\Auth\RefreshToken::class);
     Route::post('verify-account', \App\Actions\Central\Auth\VerifyAccount::class);
-    Route::post('resend-verification', \App\Actions\Central\Auth\ResendEmailVerification::class);
+    Route::get('resend-verification', \App\Actions\Central\Auth\ResendEmailVerification::class);
   });
 
   // Organization
