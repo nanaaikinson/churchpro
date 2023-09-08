@@ -69,8 +69,7 @@ class Onboard
       // Persist to db
       DB::commit();
 
-      return $this->messageResponse('Your organization has been on-boarded successfully. Please wait for approval.');
-
+      return $this->dataResponse(['onboarding_step' => UserOnboardingStepEnum::TenantApproval], 'Your organization has been on-boarded successfully. Please wait for approval.');
     } catch (\Exception $e) {
       DB::rollBack();
 

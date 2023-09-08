@@ -17,6 +17,7 @@ class AuthUserResource extends JsonResource
     $media = $this->whenLoaded('media') ? $this->media->where('tag', 'avatar')->first() : null;
 
     $data = [
+      'id' => $this->id,
       'first_name' => $this->first_name,
       'last_name' => $this->last_name,
       'email' => $this->email,

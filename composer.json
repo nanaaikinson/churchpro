@@ -21,6 +21,7 @@
     "php-open-source-saver/jwt-auth": "^2.1",
     "plank/laravel-mediable": "^5.9",
     "predis/predis": "^2.2",
+    "pusher/pusher-php-server": "^7.2",
     "resend/resend-laravel": "^0.5.0"
   },
   "require-dev": {

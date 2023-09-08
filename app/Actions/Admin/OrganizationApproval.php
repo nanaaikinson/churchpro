@@ -2,6 +2,10 @@
 
 namespace App\Actions\Admin;
 
+use App\Enums\OrganizationApproval as OrganizationApprovalEnum;
+use App\Enums\UserOnboardingStepEnum;
+use App\Helpers\Broadcast;
+use App\Helpers\CamelCaseConverter;
 use App\Mail\OrganizationApprovalMail;
 use App\Models\Organization;
 use App\Models\User;
@@ -34,11 +38,12 @@ class OrganizationApproval
     try {
       // Change approval status
       $organizations = $request->input('organizations');
-      Organization::whereIn('id', $organizations)->update(['approval' => $request->input('approval')]);
+      $approval = $request->input('approval');
+      Organization::whereIn('id', $organizations)->update(['approval' => $approval]);
 
       // Get users
       $results = DB::table('users')
-        ->select('users.email', 'users.first_name', 'users.last_name', 'organizations.name as organization_name')
+        ->select('users.id', 'users.email', 'users.first_name', 'users.last_name', 'organizations.name as organization_name', 'organizations.id as organization_id')
         ->leftJoin('iams', 'users.id', '=', 'iams.user_id')
         ->leftJoin('organizations', 'organizations.id', '=', 'iams.organization_id')
         ->where('iams.root', true)
@@ -46,15 +51,23 @@ class OrganizationApproval
         ->get();
 
       // Send emails
-      $results->each(function ($result) use ($request) {
+      $results->each(function ($result) use ($approval) {
         $data = [
           'name' => "{$result->first_name} {$result->last_name}",
           'organization_name' => $result->organization_name,
-          'approval' => $request->input('approval')
+          'approval' => $approval,
+          'onboarding_step' => $approval == OrganizationApprovalEnum::Approved ? UserOnboardingStepEnum::Complete : UserOnboardingStepEnum::TenantRejection,
         ];
 
         dispatch(function () use ($result, $data) {
-          Mail::to($result->email)->send(new OrganizationApprovalMail($data));
+          // Mail::to($result->email)->send(new OrganizationApprovalMail($data));
+          User::where('id', $result->id)->update(['onboarding_step' => $data['onboarding_step']]);
+
+          Broadcast::trigger(
+            channel: "Auth.User." . $result->id,
+            event: "ORGANIZATION_APPROVAL",
+            data: json_encode(CamelCaseConverter::run($data))
+          );
         })->afterCommit();
       });
 
