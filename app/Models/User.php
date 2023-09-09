@@ -54,7 +54,7 @@ class User extends Authenticatable implements JWTSubject
   public function name(): Attribute
   {
     return Attribute::make(
-      get: fn() => $this->first_name . ' ' . $this->last_name,
+      get: fn () => $this->first_name . ' ' . $this->last_name,
     );
   }
 
@@ -97,5 +97,10 @@ class User extends Authenticatable implements JWTSubject
   public function devices(): HasMany
   {
     return $this->hasMany(UserDevice::class);
+  }
+
+  public function authTokens(): HasMany
+  {
+    return $this->hasMany(UserAuthToken::class);
   }
 }

@@ -20,6 +20,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('refresh-token', \App\Actions\Central\Auth\RefreshToken::class);
     Route::post('verify-account', \App\Actions\Central\Auth\VerifyAccount::class);
     Route::get('resend-verification', \App\Actions\Central\Auth\ResendEmailVerification::class);
+    Route::patch('update-password', \App\Actions\Central\Auth\UpdatePassword::class);
+    Route::patch('update-profile', \App\Actions\Central\Auth\UpdateProfile::class);
+    Route::post('logout', \App\Actions\Central\Auth\Logout::class);
   });
 
   // Organization

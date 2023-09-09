@@ -5,23 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Str;
+use Illuminate\Support\Str;
 
 /**
- * @mixin IdeHelperLike
+ * @mixin IdeHelperUserAuthToken
  */
-class Like extends Model
+class UserAuthToken extends Model
 {
   use HasFactory, HasUlids;
 
   public function newUniqueId()
   {
     return ((string) Str::ulid());
-  }
-
-  // Relationships
-  public function likeable()
-  {
-    return $this->morphTo();
   }
 }

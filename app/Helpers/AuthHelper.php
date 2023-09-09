@@ -1,12 +1,14 @@
 <?php
 
-namespace App\Actions\Central\Auth;
+namespace App\Helpers;
 
 use App\Enums\UserChannelEnum;
 use App\Http\Resources\AuthUserResource;
 use App\Models\User;
+use Illuminate\Support\Str;
+use PHPOpenSourceSaver\JWTAuth\JWTGuard;
 
-class Helper
+class AuthHelper
 {
   public static function userWithToken(User $user, string $channel, bool $refresh = false, bool $relations = false): array
   {
@@ -22,13 +24,22 @@ class Helper
 
   private static function withToken(User $user, string $channel, bool $refresh = false): array
   {
-    $claims = ['channel' => $channel, 'type' => 'access'];
-    $token = auth('api')->claims($claims)->setTTL(120)->login($user);
+    /**
+     * @var JWTGuard $auth
+     */
+    $auth = auth('api');
+
+    $reference = Str::random(32);
+    $claims = ['channel' => $channel, 'type' => 'access', 'reference' => $reference];
+    $token = $auth->claims($claims)->setTTL(120)->login($user);
     $data = ['access' => $token, 'expires_at' => now()->addHours(2)];
+
+    // Create auth token
+    $user->authTokens()->create(['reference' => $reference]);
 
     if ($refresh) {
       $claims['type'] = 'refresh';
-      $refresh = auth('api')->claims($claims)->setTTL(1440)->login($user);
+      $refresh = $auth->claims($claims)->setTTL(1440)->login($user);
 
       $data['refresh'] = $refresh;
     }
@@ -38,8 +49,21 @@ class Helper
 
   public static function refreshToken(bool $blacklist = false, bool $resetClaims = false)
   {
+    /**
+     * @var JWTGuard $auth
+     */
+    $auth = auth('api');
+
+    /**
+     * @var User $user
+     */
+    $user = $auth->user();
+    $reference = Str::random(32);
+
+    $user->authTokens()->create(['reference' => $reference]);
+
     return [
-      'access' => auth('api')->setTTL(120)->claims(['type' => 'access'])->refresh($blacklist, $resetClaims),
+      'access' => $auth->setTTL(120)->claims(['type' => 'access', 'reference' => $reference])->refresh($blacklist, $resetClaims),
       'expires_at' => now()->addHours(2),
     ];
   }

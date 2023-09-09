@@ -6,6 +6,7 @@ use App\Enums\FileUploadContentTypeEnum;
 use App\Enums\UserChannelEnum;
 use App\Enums\UserOnboardingStepEnum;
 use App\Enums\UserProviderEnum;
+use App\Helpers\AuthHelper;
 use App\Models\User;
 use App\Services\FileService;
 use App\Traits\ApiResponse;
@@ -60,7 +61,7 @@ class SocialSignUp
           $user->attachMedia($media, 'avatar');
         })->afterCommit();
 
-        $data = Helper::userWithToken($user, $channel, true);
+        $data = AuthHelper::userWithToken($user, $channel, true);
 
         DB::commit();
 
