@@ -225,6 +225,28 @@ paths:
         - JWT: []
       description: 'Central: Auth resend email verification'
     parameters: []
+  /c/auth/logout:
+    post:
+      summary: ''
+      tags:
+        - central
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      operationId: auth-logout
+      description: 'Cental: Auth logout'
+      security:
+        - JWT: []
   /c/files/upload:
     post:
       summary: Your GET endpoint
