@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -9,7 +11,7 @@ use BenSampo\Enum\Enum;
  * @method static static Pending()
  * @method static static Rejected()
  */
-final class OrganizationApproval extends Enum
+final class OrganizationApprovalEnum extends Enum
 {
   const Approved = 'approved';
   const Pending = 'pending';

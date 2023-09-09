@@ -2,7 +2,7 @@
 
 namespace App\Actions\Central\Organization;
 
-use App\Enums\OrganizationApproval;
+use App\Enums\OrganizationApprovalEnum;
 use App\Enums\OrganizationStatus;
 use App\Enums\UserOnboardingStepEnum;
 use App\Http\Requests\StoreOrganizationRequest;
@@ -33,7 +33,7 @@ class Onboard
       // Create organization
       $organization = Organization::create([
         'name' => $request->input('name'),
-        'approval' => OrganizationApproval::Pending,
+        'approval' => OrganizationApprovalEnum::Pending,
         'status' => OrganizationStatus::Enabled,
         'data' => json_encode([
           'phone_number' => $request->input('phone_number'),
