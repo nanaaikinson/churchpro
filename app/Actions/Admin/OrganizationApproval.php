@@ -6,6 +6,7 @@ use App\Enums\OrganizationApprovalEnum;
 use App\Enums\UserOnboardingStepEnum;
 use App\Helpers\Broadcast;
 use App\Helpers\CamelCaseConverter;
+use App\Helpers\Constants;
 use App\Mail\OrganizationApprovalMail;
 use App\Models\Organization;
 use App\Models\User;
@@ -74,9 +75,9 @@ class OrganizationApproval
 
           // TODO: Change this to use Laravel's native broadcasting
           Broadcast::trigger(
-            channel: "Auth.User." . $result->id,
+            channel: Constants::USER_CHANNEL . $result->id,
             event: "ORGANIZATION_APPROVAL",
-            data: json_encode(CamelCaseConverter::run($data))
+            data: $data
           );
         })->afterCommit();
       });

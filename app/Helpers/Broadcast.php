@@ -18,6 +18,6 @@ class Broadcast
       ]
     );
 
-    $pusher->trigger($channel, $event, $data);
+    $pusher->trigger($channel, $event, json_encode(CamelCaseConverter::run($data)));
   }
 }
