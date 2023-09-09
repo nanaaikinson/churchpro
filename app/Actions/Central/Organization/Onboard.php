@@ -2,7 +2,7 @@
 
 namespace App\Actions\Central\Organization;
 
-use App\Enums\OrganizationApproval;
+use App\Enums\OrganizationApprovalEnum;
 use App\Enums\OrganizationStatus;
 use App\Enums\UserOnboardingStepEnum;
 use App\Http\Requests\StoreOrganizationRequest;
@@ -33,7 +33,7 @@ class Onboard
       // Create organization
       $organization = Organization::create([
         'name' => $request->input('name'),
-        'approval' => OrganizationApproval::Pending,
+        'approval' => OrganizationApprovalEnum::Pending,
         'status' => OrganizationStatus::Enabled,
         'data' => json_encode([
           'phone_number' => $request->input('phone_number'),
@@ -69,8 +69,7 @@ class Onboard
       // Persist to db
       DB::commit();
 
-      return $this->messageResponse('Your organization has been on-boarded successfully. Please wait for approval.');
-
+      return $this->dataResponse(['onboarding_step' => UserOnboardingStepEnum::TenantApproval], 'Your organization has been on-boarded successfully. Please wait for approval.');
     } catch (\Exception $e) {
       DB::rollBack();
 
