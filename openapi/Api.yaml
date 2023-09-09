@@ -124,6 +124,30 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdatePasswordRequest'
     parameters: []
+  /c/auth/update-profile:
+    patch:
+      summary: ''
+      tags:
+        - central
+      operationId: auth-update-profile
+      description: 'Central: auth update user profile'
+      security:
+        - JWT: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+        description: ''
+    parameters: []
   /c/auth/refresh-token:
     get:
       summary: ''
