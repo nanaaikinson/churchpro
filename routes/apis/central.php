@@ -13,7 +13,7 @@ Route::prefix('auth')->group(function () {
 /**
  * Protected routes
  */
-Route::middleware('auth:api')->group(function () {
+Route::middleware(['auth:api', 'auth.token.validity'])->group(function () {
   // Auth
   Route::prefix('auth')->group(function () {
     Route::get('user', \App\Actions\Central\Auth\GetUser::class);

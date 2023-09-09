@@ -24,7 +24,8 @@ class LogoutUserFromAllDevicesJob implements ShouldQueue
   public function handle(): void
   {
     try {
-      // TODO: Invalidate all auth tokens
+      // Invalidate all auth tokens
+      $this->user->authTokens()->update(['whitelisted' => false]);
 
       // TODO: Mobile push notification
       $this->user->devices()->where('active', true)->get()

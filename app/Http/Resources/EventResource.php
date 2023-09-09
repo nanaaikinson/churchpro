@@ -2,17 +2,16 @@
 
 namespace App\Http\Resources;
 
+use App\Services\FileService;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class EventResource extends JsonResource
 {
-  public function __construct($resource, private readonly string|null $image)
-  {
-    parent::__construct($resource);
-  }
-
   public function toArray($request)
   {
+    $media = $this->firstMedia('excerpt');
+    $image = FileService::getFileUrlFromMedia($media);
+
     return [
       'id' => $this->id,
       'title' => $this->title,
@@ -22,7 +21,7 @@ class EventResource extends JsonResource
       'location' => $this->location,
       'published' => $this->published,
       'created_at' => $this->created_at,
-      'image' => $this->image,
+      'image' => $image,
     ];
   }
 }
