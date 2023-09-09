@@ -387,79 +387,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                x-examples:
-                  Example 1:
-                    data:
-                      - id: 01H9DMZ4P2XB62T3H188HJVZ96
-                        title: Test prayer request
-                        description: This is a test description
-                        createdAt: '2023-09-03T13:50:56.000000Z'
-                        status: null
-                        name: Nana Aikinson
-                        email: nanaaikinson2020@gmail.com
-                        phoneNumber: null
-                    meta:
-                      show: Showing 1 to 1 of 1 items
-                      total: 1
-                      count: 1
-                      perPage: 10
-                      currentPage: 1
-                      totalPages: 1
-                      links:
-                        first: 'https://chsync.test/api/t/prayers?page=1'
-                        last: 'https://chsync.test/api/t/prayers?page=1'
-                        prev: null
-                        next: null
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Prayer'
-                  meta:
-                    type: object
-                    required:
-                      - show
-                      - total
-                      - count
-                      - perPage
-                      - currentPage
-                      - totalPages
-                      - links
-                    properties:
-                      show:
-                        type: string
-                      total:
-                        type: integer
-                      count:
-                        type: integer
-                      perPage:
-                        type: integer
-                      currentPage:
-                        type: integer
-                      totalPages:
-                        type: integer
-                      links:
-                        type: object
-                        required:
-                          - first
-                          - last
-                          - prev
-                          - next
-                        properties:
-                          first:
-                            type: string
-                          last:
-                            type: string
-                          prev:
-                            type: string
-                            nullable: true
-                          next:
-                            type: string
-                            nullable: true
-                required:
-                  - data
-                  - meta
+                $ref: '#/components/schemas/PrayersResponse'
       operationId: get-prayers
       description: 'Tenant: Get prayers'
       security:
@@ -524,6 +452,151 @@ paths:
         name: id
         in: path
         required: true
+  /t/events:
+    get:
+      summary: ''
+      tags:
+        - tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventsResponse'
+      operationId: get-events
+      description: 'Tenant: Get events'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+        - schema:
+            type: string
+          in: query
+          name: page
+          description: Current page
+        - schema:
+            type: string
+          in: query
+          name: limit
+          description: Number of items
+        - schema:
+            type: string
+          in: query
+          name: search
+          description: Search query
+    parameters: []
+    post:
+      summary: ''
+      operationId: create-event
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+      description: 'Tenant: Create event'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreEventRequest'
+      tags:
+        - tenant
+  '/t/events/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: Your GET endpoint
+      tags:
+        - tenant
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+      operationId: get-event
+      description: 'Tenant: Get event'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          required: true
+          description: Tenant identification key
+    patch:
+      tags:
+        - tenant
+      summary: ''
+      operationId: update-event
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+      description: 'Tenant: Update event'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          description: Tenant identification key
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreEventRequest'
+    delete:
+      tags:
+        - tenant
+      summary: ''
+      operationId: delete-event
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+      description: 'Tenant: Delete event'
+      security:
+        - JWT: []
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: X-Tenant
+          description: Tenant identification key
+          required: true
 components:
   schemas:
     OnboardingRequest:
@@ -621,82 +694,6 @@ components:
       required:
         - data
         - message
-    AuthUserResponse2:
-      type: object
-      x-examples:
-        Example 1:
-          data:
-            user:
-              firstName: Nana
-              lastName: Aikinson
-              email: nanaaikinson2020@gmail.com
-              avatar: null
-              onboardingStep: account verification
-              organizations: []
-            token:
-              accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvbG9jYWwvc2lnbi11cCIsImlhdCI6MTY5MzM1NjMyOCwiZXhwIjoxNjkzMzYzNTI4LCJuYmYiOjE2OTMzNTYzMjgsImp0aSI6Imh6ZGhvbU5XeTNQQWI3VzIiLCJzdWIiOiIwMUg5MVlFMVE5R1FEMEgxNEdYUFo5UFJTRiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJjaGFubmVsIjoidGVuYW50In0.fMGScLG9qDsYbSUManZnhmHQ5tLhsd_NiXkstRb5DUs
-              expiresAt: '2023-08-31T00:45:28.689725Z'
-              refreshToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2Noc3luYy50ZXN0L2FwaS9jL2F1dGgvbG9jYWwvc2lnbi11cCIsImlhdCI6MTY5MzM1NjMyOCwiZXhwIjoxNjkzNDQyNzI4LCJuYmYiOjE2OTMzNTYzMjgsImp0aSI6IlczTmdOVE9rMUlra0NISDIiLCJzdWIiOiIwMUg5MVlFMVE5R1FEMEgxNEdYUFo5UFJTRiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjciLCJjaGFubmVsIjoidGVuYW50In0.H5do1rZpoWDd5AX--4BjA3cH366XEWVY3V2Sr0Z3lek
-          message: |-
-            Thank you for signing up! We're thrilled to have you join Church Sync.
-                    Your account creation is almost complete. Please check your email for a verification code.
-                    Once you've received it, simply enter the code in the verification code input to finalize your account setup.
-                    We can't wait to see you make the most of our platform!
-      x-stoplight:
-        id: a95c2a2521a6d
-      properties:
-        data:
-          type: object
-          required:
-            - user
-          properties:
-            user:
-              type: object
-              required:
-                - firstName
-                - lastName
-                - email
-                - avatar
-                - onboardingStep
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                email:
-                  type: string
-                avatar:
-                  type: string
-                  nullable: true
-                onboardingStep:
-                  type: string
-                  enum:
-                    - account creation
-                    - account verification
-                    - tenant onboarding
-                    - tenant approval
-                    - complete
-                organizations:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Organization'
-            tokens:
-              type: object
-              properties:
-                access:
-                  type: string
-                expiresAt:
-                  type: string
-                refresh:
-                  type: string
-              required:
-                - access
-                - expiresAt
-        message:
-          type: string
-      required:
-        - data
-        - message
     SocialRequest:
       title: SocialRequest
       x-stoplight:
@@ -769,16 +766,6 @@ components:
           type: string
       required:
         - verificationCode
-    ResendEmailVerificationRequest:
-      title: ResendEmailVerificationRequest
-      x-stoplight:
-        id: b17z2fxztv14j
-      type: object
-      properties:
-        email:
-          type: string
-      required:
-        - email
     Prayer:
       type: object
       x-examples:
@@ -821,29 +808,6 @@ components:
         - phoneNumber
     PrayersResponse:
       type: object
-      x-examples:
-        Example 1:
-          data:
-            - id: 01H81MXPT49ZF0HXWKFWWHTAPE
-              title: Test title
-              description: Test description
-              createdAt: '2023-08-17T11:43:34.000000Z'
-              status: null
-              name: John Doe
-              email: john.doe@example.com
-              phoneNumber: null
-          meta:
-            show: Showing 1 to 1 of 1 items
-            total: 1
-            count: 1
-            perPage: 10
-            currentPage: 1
-            totalPages: 1
-            links:
-              first: 'http://saas.test/api/t/prayer-requests?page=1'
-              last: 'http://saas.test/api/t/prayer-requests?page=1'
-              prev: null
-              next: null
       description: Prayers response
       properties:
         data:
@@ -1032,7 +996,6 @@ components:
           default: false
         image:
           type: string
-          format: binary
           nullable: true
       required:
         - title
@@ -1040,36 +1003,6 @@ components:
         - startDate
         - endDate
         - published
-    UpdateEventRequest:
-      title: UpdateEventRequest
-      type: object
-      x-stoplight:
-        id: 9f233780ecb9e
-      properties:
-        title:
-          type: string
-        description:
-          type: string
-        startDate:
-          type: string
-        endDate:
-          type: string
-        published:
-          type: boolean
-          default: false
-        image:
-          type: string
-          format: binary
-        _method:
-          type: string
-          default: patch
-      required:
-        - title
-        - description
-        - startDate
-        - endDate
-        - published
-      description: ''
     EventResponse:
       type: object
       x-examples:
