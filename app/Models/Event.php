@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\TenantScope;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,6 +21,11 @@ class Event extends Model
     return ((string) Str::ulid());
   }
 
+  protected static function booted(): void
+  {
+    static::addGlobalScope(new TenantScope);
+  }
+
   // Relationships
   public function organization()
   {
@@ -29,5 +35,10 @@ class Event extends Model
   public function comments()
   {
     return $this->morphMany(Comment::class, 'commentable');
+  }
+
+  public function bookmarks()
+  {
+    return $this->morphMany(Bookmark::class, 'bookmarkable');
   }
 }

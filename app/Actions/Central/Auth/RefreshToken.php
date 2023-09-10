@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Actions\Auth;
+namespace App\Actions\Central\Auth;
 
+use App\Helpers\AuthHelper;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -20,10 +21,9 @@ class RefreshToken
         throw new \Exception('Invalid token provided.');
       }
 
-      $token = Helper::refreshToken();
+      $token = AuthHelper::refreshToken();
 
       return $this->dataResponse($token, 'Token refreshed successfully.');
-
     } catch (\Exception $e) {
       return $this->badRequestResponse(null, $e->getMessage());
     }

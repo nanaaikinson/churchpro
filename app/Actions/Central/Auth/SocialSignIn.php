@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Actions\Auth;
+namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
 use App\Enums\UserStatusEnum;
+use App\Helpers\AuthHelper;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use BenSampo\Enum\Rules\EnumValue;
@@ -38,7 +39,7 @@ class SocialSignIn
 
       // Check status
       if ($user->status == UserStatusEnum::Active) {
-        $data = Helper::userWithToken(user: $user, channel: $channel, refresh: true, relations: true);
+        $data = AuthHelper::userWithToken(user: $user, channel: $channel, refresh: true, relations: true);
 
         return $this->dataResponse($data, 'Successfully signed in.');
       }

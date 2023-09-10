@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Actions\Auth;
+namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
 use App\Enums\UserStatusEnum;
+use App\Helpers\AuthHelper;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use BenSampo\Enum\Rules\EnumValue;
@@ -34,7 +35,7 @@ class LocalSignIn
 
         // Check if user is verified
         if (!$user->email_verified_at) {
-          $data = Helper::userWithToken(
+          $data = AuthHelper::userWithToken(
             user: $user,
             channel: $channel,
             refresh: true,
@@ -46,7 +47,7 @@ class LocalSignIn
 
         // Check status
         if ($user->status == UserStatusEnum::Active) {
-          $data = Helper::userWithToken(
+          $data = AuthHelper::userWithToken(
             user: $user,
             channel: $channel,
             refresh: true,

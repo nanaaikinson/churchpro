@@ -1,39 +1,23 @@
 <?php
 
-namespace App\Actions\Organization;
+namespace App\Actions\Central\Organization;
 
-use App\Enums\FileUploadContentTypeEnum;
-use App\Enums\OrganizationApproval;
+use App\Enums\OrganizationApprovalEnum;
 use App\Enums\OrganizationStatus;
-use App\Enums\RoleAtChurch;
 use App\Enums\UserOnboardingStepEnum;
+use App\Http\Requests\StoreOrganizationRequest;
 use App\Models\Organization;
-use App\Services\FileService;
+use App\Models\User;
 use App\Traits\ApiResponse;
-use BenSampo\Enum\Rules\EnumValue;
-use Illuminate\Validation\Rules\File;
-use Lorisleiva\Actions\ActionRequest;
-use Lorisleiva\Actions\Concerns\AsAction;
 use DB;
+use Lorisleiva\Actions\Concerns\AsAction;
 use Str;
 
 class Onboard
 {
   use AsAction, ApiResponse;
 
-  public function rules(): array
-  {
-    return [
-      'name' => ['required', 'string', 'max:191'],
-      'role_at_church' => ['required', 'string', new EnumValue(RoleAtChurch::class)],
-      'default_branch' => ['required', 'string', 'max:191'],
-      'phone_number' => ['required', 'string', 'max:12'],
-      'location' => ['required', 'string', 'max:191'],
-      'logo' => ['nullable', File::types(['jpg', 'jpeg', 'png'])->max(3 * 1024)],
-    ];
-  }
-
-  public function handle(ActionRequest $request)
+  public function handle(StoreOrganizationRequest $request): \Illuminate\Http\JsonResponse
   {
     DB::beginTransaction();
 
@@ -41,18 +25,21 @@ class Onboard
 
     try {
       /**
-       * @var \App\Models\User $user
+       * @var User $user
        */
       $user = $request->user('api');
+      $logo = $request->input('logo');
 
       // Create organization
       $organization = Organization::create([
         'name' => $request->input('name'),
-        'approval' => OrganizationApproval::Pending,
+        'approval' => OrganizationApprovalEnum::Pending,
         'status' => OrganizationStatus::Enabled,
         'data' => json_encode([
           'phone_number' => $request->input('phone_number'),
           'location' => $request->input('location'),
+          'email' => $request->input('email'),
+          'representative' => ['role' => $request->input('role_at_church')]
         ])
       ]);
 
@@ -74,20 +61,15 @@ class Onboard
       // Update user onboarding step
       $user->update(['onboarding_step' => UserOnboardingStepEnum::TenantApproval]);
 
-      // Upload logo if any
-      if ($request->hasFile('logo')) {
-        dispatch(function () use ($request, $organization) {
-          $media = FileService::uploadFromSource($request->file('logo'), FileUploadContentTypeEnum::Logo);
-
-          $organization->attachMedia($media, 'logo');
-        })->afterCommit();
+      // Attach logo if any
+      if ($logo) {
+        $organization->attachMedia($logo, 'logo');
       }
 
       // Persist to db
       DB::commit();
 
-      return $this->messageResponse('Your organization\'s has been on-boarded successfully. Please wait for approval.');
-
+      return $this->dataResponse(['onboarding_step' => UserOnboardingStepEnum::TenantApproval], 'Your organization has been on-boarded successfully. Please wait for approval.');
     } catch (\Exception $e) {
       DB::rollBack();
 

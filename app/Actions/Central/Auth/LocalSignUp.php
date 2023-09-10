@@ -1,20 +1,21 @@
 <?php
 
-namespace App\Actions\Auth;
+namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
 use App\Enums\UserOnboardingStepEnum;
 use App\Enums\UserProviderEnum;
+use App\Helpers\AuthHelper;
 use App\Mail\AccountVerificationMail;
 use App\Models\User;
 use App\Traits\ApiResponse;
 use BenSampo\Enum\Rules\EnumValue;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
-use Illuminate\Support\Facades\DB;
 
 class LocalSignUp
 {
@@ -70,14 +71,13 @@ class LocalSignUp
         Mail::to($user->email)->send(new AccountVerificationMail($user, $code, false));
       })->afterCommit();
 
-      $data = Helper::userWithToken($user, $channel, true);
+      $data = AuthHelper::userWithToken($user, $channel, true);
 
       DB::commit();
 
       return $this->dataResponse($data, "Thank you for signing up! We're thrilled to have you join {$appName}.
         Your account creation is almost complete. Please check your email for a verification code.
         Once you've received it, simply enter the code in the verification code input to finalize your account setup.");
-
     } catch (\Exception $e) {
       DB::rollBack();
 

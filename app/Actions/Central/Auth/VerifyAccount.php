@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\Auth;
+namespace App\Actions\Central\Auth;
 
 use App\Enums\UserOnboardingStepEnum;
 use App\Models\User;
@@ -25,10 +25,9 @@ class VerifyAccount
     DB::beginTransaction();
 
     /**
-     * @var User $user
      * @var \App\Models\VerificationCode $verificationCode
      */
-    $user = $request->user('api');
+    $user = auth('api')->user();
     $code = $request->input('verification_code');
 
     try {
@@ -49,7 +48,7 @@ class VerifyAccount
 
       DB::commit();
 
-      return $this->messageResponse('Your account has been verified successfully.');
+      return $this->dataResponse(['onboarding_step' => UserOnboardingStepEnum::TenantOnboarding], 'Your account has been verified successfully.');
     } catch (\Exception $e) {
       DB::rollBack();
 

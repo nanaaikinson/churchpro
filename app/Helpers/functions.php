@@ -62,11 +62,11 @@ if (!function_exists('to_boolean')) {
   /**
    * Convert to boolean
    *
-   * @param $booleable
+   * @param $value
    * @return boolean
    */
-  function to_boolean($booleable)
+  function to_boolean($value): bool
   {
-    return filter_var($booleable, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+    return filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
   }
 }
