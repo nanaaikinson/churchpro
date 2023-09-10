@@ -101,6 +101,29 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/LocalSignUpRequest'
+  /c/auth/update-device:
+    post:
+      summary: ''
+      tags:
+        - central
+      operationId: auth-update-device
+      description: 'Central: auth update device'
+      security:
+        - JWT: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDeviceRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+    parameters: []
   /c/auth/update-password:
     patch:
       summary: ''
@@ -1448,6 +1471,25 @@ components:
       required:
         - firstName
         - lastName
+    UpdateDeviceRequest:
+      title: UpdateDeviceRequest
+      x-stoplight:
+        id: pioxfxk04mpio
+      type: object
+      properties:
+        deviceId:
+          type: string
+        fcmToken:
+          type: string
+        type:
+          type: string
+          enum:
+            - android
+            - ios
+      required:
+        - deviceId
+        - fcmToken
+        - type
   securitySchemes:
     JWT:
       type: http

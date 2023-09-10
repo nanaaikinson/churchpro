@@ -22,6 +22,7 @@ Route::middleware(['auth:api', 'auth.token.validity'])->group(function () {
     Route::get('resend-verification', \App\Actions\Central\Auth\ResendEmailVerification::class);
     Route::patch('update-password', \App\Actions\Central\Auth\UpdatePassword::class);
     Route::patch('update-profile', \App\Actions\Central\Auth\UpdateProfile::class);
+    Route::post('update-device', \App\Actions\Central\Auth\UpdateDevice::class);
     Route::post('logout', \App\Actions\Central\Auth\Logout::class);
   });
 
