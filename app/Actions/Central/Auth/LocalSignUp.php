@@ -51,7 +51,8 @@ class LocalSignUp
         'password' => $password,
         'onboarding_step' => UserOnboardingStepEnum::AccountVerification,
         'channels' => json_encode([UserChannelEnum::Tenant, UserChannelEnum::Mobile]),
-        'providers' => json_encode([UserProviderEnum::Local])
+        'providers' => json_encode([UserProviderEnum::Local]),
+        'sign_up_provider' => UserProviderEnum::Local,
       ]);
 
       // Create user password

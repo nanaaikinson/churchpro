@@ -40,7 +40,14 @@ class SocialSignUp
       $user = User::where('email', $result->user['email'])->first();
 
       if ($user) {
-        throw new \Exception('Sorry. An account with this email already exists.');
+        if ($user->sign_up_provider == UserProviderEnum::Local) {
+          throw new \Exception('An account with this email already exists. Please sign in with your email and password.');
+        }
+
+        if ($user->sign_up_provider == UserProviderEnum::Google) {
+          // Login
+          return SocialSignIn::run($request);
+        }
       } else {
         // Create user
         $user = User::create([
@@ -51,6 +58,7 @@ class SocialSignUp
           'onboarding_step' => UserOnboardingStepEnum::TenantOnboarding,
           'channels' => json_encode([UserChannelEnum::Tenant, UserChannelEnum::Mobile]),
           'providers' => json_encode([UserProviderEnum::Google]),
+          'sign_up_provider' => UserProviderEnum::Google,
         ]);
 
         dispatch(function () use ($result, $user) {
