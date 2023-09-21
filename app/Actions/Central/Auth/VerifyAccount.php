@@ -2,10 +2,12 @@
 
 namespace App\Actions\Central\Auth;
 
+use App\Enums\UserChannelEnum;
 use App\Enums\UserOnboardingStepEnum;
-use App\Models\User;
 use App\Traits\ApiResponse;
+use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -16,7 +18,8 @@ class VerifyAccount
   public function rules(): array
   {
     return [
-      'verification_code' => ['required', 'string']
+      'verification_code' => ['required', 'string'],
+      'channel' => ['required', Rule::in([UserChannelEnum::Tenant, UserChannelEnum::Mobile])],
     ];
   }
 
@@ -26,9 +29,11 @@ class VerifyAccount
 
     /**
      * @var \App\Models\VerificationCode $verificationCode
+     * @var \App\Models\User $user
      */
     $user = auth('api')->user();
     $code = $request->input('verification_code');
+    $channel = $request->input('channel');
 
     try {
       $verificationCode = $user->verificationCodes()->where(['enabled' => true, 'code' => $code])->first();
@@ -44,11 +49,14 @@ class VerifyAccount
       $verificationCode->update(['enabled' => false]);
 
       // TODO: Send welcome and account verified email
-      dispatch(function () { })->afterCommit();
+      dispatch(function () {
+      })->afterCommit();
 
       DB::commit();
 
-      return $this->dataResponse(['onboarding_step' => UserOnboardingStepEnum::TenantOnboarding], 'Your account has been verified successfully.');
+      $data = $channel == UserChannelEnum::Mobile ? [] : ['onboarding_step' => UserOnboardingStepEnum::TenantOnboarding];
+
+      return $this->dataResponse($data, 'Your account has been verified successfully.');
     } catch (\Exception $e) {
       DB::rollBack();
 

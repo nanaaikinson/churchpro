@@ -5,6 +5,7 @@ namespace App\Actions\Central\Auth;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
 use Lorisleiva\Actions\Concerns\AsAction;
+use PHPOpenSourceSaver\JWTAuth\Payload;
 
 class Logout
 {
@@ -17,6 +18,7 @@ class Logout
     try {
       /**
        * @var \App\Models\User $user
+       * @var Payload $payload
        */
       $user = auth('api')->user();
       $payload = auth('api')->payload();
