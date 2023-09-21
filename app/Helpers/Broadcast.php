@@ -3,21 +3,52 @@
 namespace App\Helpers;
 
 use Pusher\Pusher;
+use Kutia\Larafirebase\Facades\Larafirebase;
 
 class Broadcast
 {
-  public static function trigger(string $channel, string $event, mixed $data)
+  private static Broadcast $instance;
+  private Pusher $pusher;
+
+  public function __construct()
   {
-    $pusher = new Pusher(
-      config('broadcasting.connections.pusher.key'),
-      config('broadcasting.connections.pusher.secret'),
-      config('broadcasting.connections.pusher.app_id'),
-      [
+    $this->pusher = new Pusher(
+      auth_key: config('broadcasting.connections.pusher.key'),
+      secret: config('broadcasting.connections.pusher.secret'),
+      app_id: config('broadcasting.connections.pusher.app_id'),
+      options: [
         'cluster' => config('broadcasting.connections.pusher.options.cluster'),
         'useTLS' => true,
       ]
     );
+  }
 
-    $pusher->trigger($channel, $event, json_encode(CamelCaseConverter::run($data)));
+  private static function getInstance(): Broadcast
+  {
+    if (!isset(self::$instance)) {
+      self::$instance = new Broadcast();
+    }
+
+    return self::$instance;
+  }
+
+  /**
+   * Trigger a web socket notification to a user(s)
+   * @param string $channel
+   * @param string $event
+   * @param mixed $data
+   * @return void
+   */
+  public static function wsNotification(string $channel, string $event, mixed $data)
+  {
+    self::getInstance()->pusher->trigger($channel, $event, json_encode(CamelCaseConverter::run($data)));
+  }
+
+  /**
+   * Trigger a fcm push notification to a user(s)
+   * @return void
+   */
+  public static function pushNotification(array $tokens, string $title, string $body, array $data = [])
+  {
   }
 }

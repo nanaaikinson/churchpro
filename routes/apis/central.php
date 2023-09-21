@@ -8,6 +8,7 @@ Route::prefix('auth')->group(function () {
   Route::post('local/sign-up', \App\Actions\Central\Auth\LocalSignUp::class);
   Route::post('social/sign-in', \App\Actions\Central\Auth\SocialSignIn::class);
   Route::post('social/sign-up', \App\Actions\Central\Auth\SocialSignUp::class);
+  Route::post('forgot-password', \App\Actions\Central\Auth\ForgotPassword::class);
 });
 
 /**

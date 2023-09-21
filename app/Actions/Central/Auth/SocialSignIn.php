@@ -3,6 +3,7 @@
 namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
+use App\Enums\UserProviderEnum;
 use App\Enums\UserStatusEnum;
 use App\Helpers\AuthHelper;
 use App\Models\User;
@@ -34,7 +35,11 @@ class SocialSignIn
       $user = User::where('email', $result->user['email'])->first();
 
       if (!$user) {
-        throw new \Exception('Sorry. An account with this email does not exist.');
+        return SocialSignUp::run($request);
+      }
+
+      if ($user->sign_up_provider == UserProviderEnum::Local) {
+        throw new \Exception('This account was registered with an email and password. Please sign in with that instead.');
       }
 
       // Check status

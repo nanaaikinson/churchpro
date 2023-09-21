@@ -74,7 +74,7 @@ class OrganizationApproval
           User::where('id', $result->id)->update(['onboarding_step' => $data['onboarding_step']]);
 
           // TODO: Change this to use Laravel's native broadcasting
-          Broadcast::trigger(
+          Broadcast::wsNotification(
             channel: Constants::USER_CHANNEL . $result->id,
             event: "ORGANIZATION_APPROVAL",
             data: $data

@@ -34,7 +34,7 @@ class LogoutUserFromAllDevicesJob implements ShouldQueue
         });
 
       // Web push notification
-      Broadcast::trigger(Constants::USER_CHANNEL . $this->user->id, 'LOGOUT', [
+      Broadcast::wsNotification(Constants::USER_CHANNEL . $this->user->id, 'LOGOUT', [
         'action' => 'LOGOUT',
         'message' => 'You have been logged out from all devices.'
       ]);
