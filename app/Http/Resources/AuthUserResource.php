@@ -22,7 +22,7 @@ class AuthUserResource extends JsonResource
       'last_name' => $this->last_name,
       'email' => $this->email,
       'avatar' => FileService::getFileUrlFromMedia($media),
-      'onboarding_step' => $this->onboarding_step
+      'email_verified' => $this->email_verified_at
     ];
 
     if ($this->relations) {

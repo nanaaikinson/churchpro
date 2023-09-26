@@ -4,7 +4,6 @@ namespace App\Actions\Central\Auth;
 
 use App\Enums\FileUploadContentTypeEnum;
 use App\Enums\UserChannelEnum;
-use App\Enums\UserOnboardingStepEnum;
 use App\Enums\UserProviderEnum;
 use App\Helpers\AuthHelper;
 use App\Models\User;
@@ -55,7 +54,6 @@ class SocialSignUp
           'last_name' => $result->user['family_name'],
           'email' => $result->user['email'],
           'email_verified_at' => now(),
-          'onboarding_step' => UserOnboardingStepEnum::TenantOnboarding,
           'channels' => json_encode([UserChannelEnum::Tenant, UserChannelEnum::Mobile]),
           'providers' => json_encode([UserProviderEnum::Google]),
           'sign_up_provider' => UserProviderEnum::Google,
