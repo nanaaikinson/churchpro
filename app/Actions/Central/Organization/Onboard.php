@@ -4,7 +4,6 @@ namespace App\Actions\Central\Organization;
 
 use App\Enums\OrganizationApprovalEnum;
 use App\Enums\OrganizationStatus;
-use App\Enums\UserOnboardingStepEnum;
 use App\Http\Requests\StoreOrganizationRequest;
 use App\Models\Organization;
 use App\Models\User;
@@ -58,9 +57,6 @@ class Onboard
         'root' => true
       ]);
 
-      // Update user onboarding step
-      $user->update(['onboarding_step' => UserOnboardingStepEnum::TenantApproval]);
-
       // Attach logo if any
       if ($logo) {
         $organization->attachMedia($logo, 'logo');
@@ -69,7 +65,7 @@ class Onboard
       // Persist to db
       DB::commit();
 
-      return $this->dataResponse(['onboarding_step' => UserOnboardingStepEnum::TenantApproval], 'Your organization has been on-boarded successfully. Please wait for approval.');
+      return $this->messageResponse('Your organization has been on-boarded successfully. Please wait for approval.');
     } catch (\Exception $e) {
       DB::rollBack();
 

@@ -5,7 +5,6 @@ namespace App\Actions\Admin;
 use App\Enums\OrganizationApprovalEnum;
 use App\Enums\UserOnboardingStepEnum;
 use App\Helpers\Broadcast;
-use App\Helpers\CamelCaseConverter;
 use App\Helpers\Constants;
 use App\Mail\OrganizationApprovalMail;
 use App\Models\Organization;
@@ -71,7 +70,6 @@ class OrganizationApproval
 
         dispatch(function () use ($result, $data) {
           // Mail::to($result->email)->send(new OrganizationApprovalMail($data));
-          User::where('id', $result->id)->update(['onboarding_step' => $data['onboarding_step']]);
 
           // TODO: Change this to use Laravel's native broadcasting
           Broadcast::wsNotification(

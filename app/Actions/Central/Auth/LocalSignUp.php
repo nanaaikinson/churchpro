@@ -3,11 +3,11 @@
 namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
-use App\Enums\UserOnboardingStepEnum;
 use App\Enums\UserProviderEnum;
 use App\Helpers\AuthHelper;
 use App\Mail\AccountVerificationMail;
 use App\Models\User;
+use App\Rules\IsBoolean;
 use App\Traits\ApiResponse;
 use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +30,8 @@ class LocalSignUp
       'last_name' => ['required', 'string', 'max:191'],
       'email' => ['required', 'email', Rule::unique('users', 'email')],
       'password' => ['required', 'string', 'max:50', in_production() ? $rule->uncompromised() : $rule],
-      'channel' => ['required', 'string', new EnumValue(UserChannelEnum::class)]
+      'channel' => ['required', 'string', new EnumValue(UserChannelEnum::class)],
+      'terms' => ['required', new IsBoolean]
     ];
   }
 
@@ -49,7 +50,6 @@ class LocalSignUp
         'last_name' => $request->input('last_name'),
         'email' => $request->input('email'),
         'password' => $password,
-        'onboarding_step' => UserOnboardingStepEnum::AccountVerification,
         'channels' => json_encode([UserChannelEnum::Tenant, UserChannelEnum::Mobile]),
         'providers' => json_encode([UserProviderEnum::Local]),
         'sign_up_provider' => UserProviderEnum::Local,

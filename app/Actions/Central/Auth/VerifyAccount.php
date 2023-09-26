@@ -3,9 +3,7 @@
 namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
-use App\Enums\UserOnboardingStepEnum;
 use App\Traits\ApiResponse;
-use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Lorisleiva\Actions\ActionRequest;
@@ -43,7 +41,7 @@ class VerifyAccount
       }
 
       // Verify user email
-      $user->update(['email_verified_at' => now(), 'onboarding_step' => UserOnboardingStepEnum::TenantOnboarding]);
+      $user->update(['email_verified_at' => now()]);
 
       // Disable verification code
       $verificationCode->update(['enabled' => false]);
@@ -54,9 +52,7 @@ class VerifyAccount
 
       DB::commit();
 
-      $data = $channel == UserChannelEnum::Mobile ? [] : ['onboarding_step' => UserOnboardingStepEnum::TenantOnboarding];
-
-      return $this->dataResponse($data, 'Your account has been verified successfully.');
+      return $this->messageResponse('Your account has been verified successfully.');
     } catch (\Exception $e) {
       DB::rollBack();
 
