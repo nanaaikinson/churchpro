@@ -23,7 +23,8 @@
     "plank/laravel-mediable": "^5.9",
     "predis/predis": "^2.2",
     "pusher/pusher-php-server": "^7.2",
-    "resend/resend-laravel": "^0.5.0"
+    "resend/resend-laravel": "^0.5.0",
+    "socialiteproviders/apple": "^5.6"
   },
   "require-dev": {
     "barryvdh/laravel-ide-helper": "^2.13",

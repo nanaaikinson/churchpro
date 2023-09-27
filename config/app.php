@@ -156,11 +156,12 @@ return [
   */
 
   'providers' => ServiceProvider::defaultProviders()->merge([
-      /*
+    /*
        * Package Service Providers...
        */
+    \SocialiteProviders\Manager\ServiceProvider::class,
 
-      /*
+    /*
        * Application Service Providers...
        */
     App\Providers\AppServiceProvider::class,

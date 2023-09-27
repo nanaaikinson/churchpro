@@ -17,7 +17,7 @@ class VerifyAccount
   {
     return [
       'verification_code' => ['required', 'string'],
-      'channel' => ['required', Rule::in([UserChannelEnum::Tenant, UserChannelEnum::Mobile])],
+      'channel' => ['required', Rule::in([UserChannelEnum::Web, UserChannelEnum::Mobile])],
     ];
   }
 

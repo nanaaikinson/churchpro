@@ -16,7 +16,7 @@ class LoginRequest extends FormRequest
   {
     $rules = [
       'email' => ['required', 'email', 'max:191'],
-      'channel' => ['required', 'string', Rule::in(UserChannelEnum::getValues())],
+      'channel' => ['required', 'string', Rule::in([UserChannelEnum::Web, UserChannelEnum::Mobile])],
       'provider' => ['required', 'string', Rule::in(UserProviderEnum::getValues())]
     ];
 

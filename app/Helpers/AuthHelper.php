@@ -68,7 +68,7 @@ class AuthHelper
     ];
   }
 
-  public static function user(User $user, bool $relations = false, string $channel = UserChannelEnum::Tenant)
+  public static function user(User $user, bool $relations = false, string $channel = UserChannelEnum::Web)
   {
     if ($channel == UserChannelEnum::Mobile) {
       $relations = false;

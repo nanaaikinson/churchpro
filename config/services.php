@@ -35,6 +35,13 @@ return [
     'client_id' => env('GOOGLE_CLIENT_ID'),
     'client_secret' => env('GOOGLE_CLIENT_SECRET'),
     'redirect' => env('SOCIAL_AUTH_REDIRECT_URL', 'http://localhost:8000/auth/callback'),
-  ]
+  ],
+
+  'apple' => [
+    'client_id' => env('APPLE_CLIENT_ID'),
+    'client_secret' => env('APPLE_CLIENT_SECRET'),
+    'redirect' => env('APPLE_REDIRECT_URI')
+  ],
+
 
 ];
