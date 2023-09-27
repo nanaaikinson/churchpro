@@ -3,6 +3,7 @@
 namespace App\Actions\Central\Auth;
 
 use App\Enums\UserChannelEnum;
+use App\Enums\UserProviderEnum;
 use App\Traits\ApiResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -34,23 +35,25 @@ class VerifyAccount
     $channel = $request->input('channel');
 
     try {
-      $verificationCode = $user->verificationCodes()->where(['enabled' => true, 'code' => $code])->first();
+      if (!in_array($user->sign_up_provider, [UserProviderEnum::Google, UserProviderEnum::Apple]) || $user->email_verified_at) {
+        $verificationCode = $user->verificationCodes()->where(['enabled' => true, 'code' => $code])->first();
 
-      if ($user->email_verified_at || !$verificationCode || $verificationCode->expires_at->isPast()) {
-        throw new \Exception('Verification code is invalid or expired.');
+        if (!$verificationCode || $verificationCode->expires_at->isPast()) {
+          throw new \Exception('Verification code is invalid or expired.');
+        }
+
+        // Verify user email
+        $user->update(['email_verified_at' => now()]);
+
+        // Disable verification code
+        $verificationCode->update(['enabled' => false]);
+
+        // TODO: Send welcome and account verified email
+        // dispatch(function () {
+        // })->afterCommit();
+
+        DB::commit();
       }
-
-      // Verify user email
-      $user->update(['email_verified_at' => now()]);
-
-      // Disable verification code
-      $verificationCode->update(['enabled' => false]);
-
-      // TODO: Send welcome and account verified email
-      dispatch(function () {
-      })->afterCommit();
-
-      DB::commit();
 
       return $this->messageResponse('Your account has been verified successfully.');
     } catch (\Exception $e) {
