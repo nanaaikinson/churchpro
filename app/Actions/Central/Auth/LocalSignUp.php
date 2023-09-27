@@ -50,7 +50,7 @@ class LocalSignUp
         'last_name' => $request->input('last_name'),
         'email' => $request->input('email'),
         'password' => $password,
-        'channels' => json_encode([UserChannelEnum::Tenant, UserChannelEnum::Mobile]),
+        'channels' => json_encode([UserChannelEnum::Web, UserChannelEnum::Mobile]),
         'providers' => json_encode([UserProviderEnum::Local]),
         'sign_up_provider' => UserProviderEnum::Local,
       ]);

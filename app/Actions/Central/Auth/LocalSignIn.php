@@ -33,7 +33,7 @@ class LocalSignIn
       $channel = $request->input('channel');
 
       if ($user) {
-        if ($user->sign_up_provider == UserProviderEnum::Google) {
+        if (in_array($user->sign_up_provider, [UserProviderEnum::Google, UserProviderEnum::Apple])) {
           throw new \Exception('This account was registered with a social provider. Please sign in with that instead.');
         }
 

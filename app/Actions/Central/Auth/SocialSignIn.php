@@ -8,7 +8,7 @@ use App\Enums\UserStatusEnum;
 use App\Helpers\AuthHelper;
 use App\Models\User;
 use App\Traits\ApiResponse;
-use BenSampo\Enum\Rules\EnumValue;
+use Illuminate\Validation\Rule;
 use Laravel\Socialite\Facades\Socialite;
 use Lorisleiva\Actions\ActionRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -21,7 +21,8 @@ class SocialSignIn
   {
     return [
       'access_token' => ['required', 'string'],
-      'channel' => ['required', 'string', new EnumValue(UserChannelEnum::class)]
+      'channel' => ['required', 'string', Rule::in([UserChannelEnum::Web, UserChannelEnum::Mobile])],
+      'provider' => ['required', 'string', Rule::in([UserProviderEnum::Google, UserProviderEnum::Apple])]
     ];
   }
 

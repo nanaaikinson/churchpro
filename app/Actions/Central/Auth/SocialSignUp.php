@@ -9,8 +9,8 @@ use App\Helpers\AuthHelper;
 use App\Models\User;
 use App\Services\FileService;
 use App\Traits\ApiResponse;
-use BenSampo\Enum\Rules\EnumValue;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Intervention\Image\Facades\Image;
 use Laravel\Socialite\Facades\Socialite;
 use Lorisleiva\Actions\ActionRequest;
@@ -24,7 +24,8 @@ class SocialSignUp
   {
     return [
       'access_token' => ['required', 'string'],
-      'channel' => ['required', 'string', new EnumValue(UserChannelEnum::class)]
+      'channel' => ['required', 'string', Rule::in([UserChannelEnum::Web, UserChannelEnum::Mobile])],
+      'provider' => ['required', 'string', Rule::in([UserProviderEnum::Google, UserProviderEnum::Apple])]
     ];
   }
 
@@ -32,6 +33,7 @@ class SocialSignUp
   {
     DB::beginTransaction();
     $channel = $request->input('channel');
+    $provider = $request->input('provider');
 
     try {
       $accessToken = $request->input('access_token');
@@ -43,8 +45,8 @@ class SocialSignUp
           throw new \Exception('An account with this email already exists. Please sign in with your email and password.');
         }
 
-        if ($user->sign_up_provider == UserProviderEnum::Google) {
-          // Login
+        // Login
+        if (in_array($user->sign_up_provider, [UserProviderEnum::Google, UserProviderEnum::Apple])) {
           return SocialSignIn::run($request);
         }
       } else {
@@ -54,9 +56,9 @@ class SocialSignUp
           'last_name' => $result->user['family_name'],
           'email' => $result->user['email'],
           'email_verified_at' => now(),
-          'channels' => json_encode([UserChannelEnum::Tenant, UserChannelEnum::Mobile]),
-          'providers' => json_encode([UserProviderEnum::Google]),
-          'sign_up_provider' => UserProviderEnum::Google,
+          'channels' => json_encode([UserChannelEnum::Web, UserChannelEnum::Mobile]),
+          'providers' => json_encode([$provider]),
+          'sign_up_provider' => $provider,
         ]);
 
         dispatch(function () use ($result, $user) {

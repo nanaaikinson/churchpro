@@ -23,7 +23,7 @@ class RegisterRequest extends FormRequest
       'first_name' => ['required', 'string', 'max:191'],
       'last_name' => ['required', 'string', 'max:191'],
       'email' => ['required', 'string', 'email', Rule::unique('users', 'email')],
-      'channel' => ['required', 'string', new EnumValue(UserChannelEnum::class)],
+      'channel' => ['required', 'string', Rule::in([UserChannelEnum::Web, UserChannelEnum::Mobile])],
       'provider' => ['required', 'string', new EnumValue(UserProviderEnum::class)]
     ];
 
