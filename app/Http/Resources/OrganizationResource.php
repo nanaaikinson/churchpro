@@ -16,6 +16,8 @@ class OrganizationResource extends JsonResource
       'name' => $this->name,
       'bookmarks' => $this->bookmarks->count(),
       'likes' => $this->likes->count(),
+      'status' => $this->status,
+      'approval' => $this->approval,
       'logo' => $this->logo,
       'data' => json_decode($this->data)
     ];
