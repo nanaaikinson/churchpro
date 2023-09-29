@@ -19,6 +19,7 @@ class OrganizationResource extends JsonResource
       'status' => $this->status,
       'approval' => $this->approval,
       'logo' => $this->logo,
+      'created_at' => $this->created_at,
       'data' => json_decode($this->data)
     ];
   }
