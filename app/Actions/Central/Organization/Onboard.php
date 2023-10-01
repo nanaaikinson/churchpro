@@ -5,6 +5,7 @@ namespace App\Actions\Central\Organization;
 use App\Enums\OrganizationApprovalEnum;
 use App\Enums\OrganizationStatus;
 use App\Http\Requests\StoreOrganizationRequest;
+use App\Http\Resources\OrganizationResource;
 use App\Models\Organization;
 use App\Models\User;
 use App\Traits\ApiResponse;
@@ -65,7 +66,10 @@ class Onboard
       // Persist to db
       DB::commit();
 
-      return $this->messageResponse('Your organization has been on-boarded successfully. Please wait for approval.');
+      return $this->dataResponse(
+        ['organizations' => OrganizationResource::collection($user->organizations)],
+        'Your organization has been on-boarded successfully. Please wait for approval.'
+      );
     } catch (\Exception $e) {
       DB::rollBack();
 
