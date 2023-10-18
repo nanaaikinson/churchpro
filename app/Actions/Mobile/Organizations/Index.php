@@ -36,7 +36,7 @@ class Index
 
       return $this->paginationResponse($organizations, 'Successfully retrieved organizations.');
     } catch (\Exception $e) {
-      return $this->badRequestResponse($e->getMessage());
+      return $this->badRequestResponse(null, $e->getMessage());
     }
   }
 }

@@ -10,5 +10,6 @@ Route::middleware(['auth:api', 'auth.token.validity'])->group(function () {
 
   Route::prefix('organizations')->group(function () {
     Route::get('/', \App\Actions\Mobile\Organizations\Index::class);
+    Route::post('/bookmark', \App\Actions\Mobile\Organizations\Bookmark::class);
   });
 });
