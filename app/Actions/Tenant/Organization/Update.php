@@ -30,7 +30,7 @@ class Update
           'phone_number' => $request->input('phone_number'),
           'location' => $request->input('location'),
           'socials' => $socials,
-          'representative' => ['role' => $data['representative']['role']]
+          'representative' =>  $data['representative'] ? ['role' => $data['representative']['role']] : null,
         ]),
       ]);
 
