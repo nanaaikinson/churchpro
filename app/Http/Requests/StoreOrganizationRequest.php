@@ -26,7 +26,7 @@ class StoreOrganizationRequest extends FormRequest
       'about' => ['nullable', 'string'],
       'logo' => ['nullable', 'string', Rule::exists('media', 'id')],
       'socials.facebook' => ['nullable', 'string', 'max:191'],
-      'socials.x' => ['nullable', 'string', 'max:191'],
+      'socials.twitter' => ['nullable', 'string', 'max:191'],
       'socials.instagram' => ['nullable', 'string', 'max:191'],
       'socials.youtube' => ['nullable', 'string', 'max:191'],
       'socials.tiktok' => ['nullable', 'string', 'max:191'],
