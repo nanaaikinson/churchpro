@@ -40,13 +40,15 @@ class OrganizationFactory extends Factory
     ];
   }
 
-  // public function configure(): static
-  // {
-  //   return $this->afterCreating(function (Organization $item) {
-  //     $image = Image::make('https://source.boringavatars.com')->encode('jpg');
-  //     $media = FileService::uploadFromString($image, FileUploadContentTypeEnum::Logo);
+  public function configure(): static
+  {
+    return $this->afterCreating(function (Organization $item) {
+      $type = fake()->randomElement(['shapes', 'icons', 'adventurer']);
+      $url = "https://api.dicebear.com/7.x/{$type}/png";
+      $image = Image::make($url)->encode('png');
+      $media = FileService::uploadFromString($image, FileUploadContentTypeEnum::Logo);
 
-  //     $item->attachMedia($media, 'logo');
-  //   });
-  // }
+      $item->attachMedia($media, 'logo');
+    });
+  }
 }
